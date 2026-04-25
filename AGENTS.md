@@ -2,6 +2,27 @@
 
 This document contains guidelines and best practices for AI agents working with this codebase.
 
+## .relay/ Documentation System
+
+This project uses a feature-based documentation system in `.relay/`:
+
+```
+.relay/
+├── registry.json          # Master registry of all features
+├── upstream.json          # Fork sync configuration
+└── features/
+    └── <NNN>-<slug>/
+        ├── spec.md        # Feature specification
+        ├── qa.md          # QA test plan (always paired with spec)
+        └── patch.md       # Fork patch with intent (only if forked)
+```
+
+**Mandatory workflow for AI agents:**
+- **Always check `.relay/features/` for existing specs before implementing anything.** If a spec already exists for the work, read it first and follow its guidance.
+- **Always run QA after implementing a feature.** Every spec MUST have a corresponding `qa.md` — if one does not exist, create it from the template.
+- **If no spec exists for the work, create one first** using the template in `.relay/README.md` before writing any code.
+- See `.relay/README.md` for full details.
+
 ## Error Management
 
 - Use `anyhow::Result` for error handling in services and repositories.
