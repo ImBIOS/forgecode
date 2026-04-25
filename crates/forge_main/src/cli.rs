@@ -10,6 +10,15 @@ use std::path::PathBuf;
 use clap::{Parser, Subcommand, ValueEnum};
 use forge_domain::{AgentId, ConversationId, Effort, ModelId, ProviderId};
 
+/// Output format for chat responses.
+#[derive(Clone, Copy, Debug, PartialEq, ValueEnum)]
+pub enum OutputFormat {
+    /// Human-readable text output (default).
+    Text,
+    /// Machine-readable NDJSON output.
+    Json,
+}
+
 #[derive(Parser)]
 #[command(version = env!("CARGO_PKG_VERSION"))]
 pub struct Cli {
@@ -53,6 +62,10 @@ pub struct Cli {
     /// Enable verbose logging output.
     #[arg(long, default_value_t = false)]
     pub verbose: bool,
+
+    /// Output format for chat responses.
+    #[arg(long, value_enum, default_value_t = OutputFormat::Text)]
+    pub output_format: OutputFormat,
 
     /// Agent ID to use for this session.
     #[arg(long, alias = "aid")]

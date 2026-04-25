@@ -28,11 +28,13 @@ use forge_tracker::ToolCallPayload;
 use forge_walker::Walker;
 use futures::future;
 use strum::IntoEnumIterator;
+use serde_json::json;
 use tokio_stream::StreamExt;
 use url::Url;
 
 use crate::cli::{
-    Cli, CommitCommandGroup, ConversationCommand, ListCommand, McpCommand, TopLevelCommand,
+    Cli, CommitCommandGroup, ConversationCommand, ListCommand, McpCommand, OutputFormat,
+    TopLevelCommand,
 };
 use crate::conversation_selector::ConversationSelector;
 use crate::display_constants::{CommandType, headers, markers, status};
@@ -3820,26 +3822,96 @@ impl<A: API + ConsoleWriter + 'static, F: Fn(ForgeConfig) -> A + Send + Sync> UI
     async fn on_chat(&mut self, chat: ChatRequest) -> Result<()> {
         let mut stream = self.api.chat(chat).await?;
 
-        // Always use streaming content writer
-        let mut writer = StreamingWriter::new(self.spinner.clone(), self.api.clone());
-
-        while let Some(message) = stream.next().await {
-            match message {
-                Ok(message) => self.handle_chat_response(message, &mut writer).await?,
-                Err(err) => {
-                    writer.finish()?;
-                    self.spinner.stop(None)?;
-                    self.spinner.reset();
-                    return Err(err);
+        if self.cli.output_format == OutputFormat::Json {
+            // NDJSON output mode: serialize each ChatResponse as a single JSON line
+            let conversation_id = self.state.conversation_id;
+            while let Some(message) = stream.next().await {
+                match message {
+                    Ok(message) => {
+                        let value = match &message {
+                            ChatResponse::TaskMessage { content } => match content {
+                                ChatResponseContent::Markdown { text, .. } => {
+                                    json!({"type": "assistant", "content": text})
+                                }
+                                ChatResponseContent::ToolInput(title) => {
+                                    json!({"type": "tool_input", "title": title.title})
+                                }
+                                ChatResponseContent::ToolOutput(text) => {
+                                    json!({"type": "tool_output", "content": text})
+                                }
+                            },
+                            ChatResponse::TaskReasoning { content } => {
+                                json!({"type": "reasoning", "content": content})
+                            }
+                            ChatResponse::TaskComplete => {
+                                json!({"type": "complete", "conversation_id": conversation_id})
+                            }
+                            ChatResponse::ToolCallStart { tool_call, .. } => {
+                                json!({"type": "tool_call_start", "name": tool_call.name.as_str()})
+                            }
+                            ChatResponse::ToolCallEnd(result) => {
+                                json!({
+                                    "type": "tool_call_end",
+                                    "name": result.name.as_str(),
+                                    "is_error": result.is_error()
+                                })
+                            }
+                            ChatResponse::RetryAttempt { cause, .. } => {
+                                json!({"type": "retry", "cause": cause.as_str()})
+                            }
+                            ChatResponse::Interrupt { reason } => {
+                                json!({"type": "interrupt", "reason": format!("{:?}", reason)})
+                            }
+                        };
+                        if let Ok(line) = serde_json::to_string(&value) {
+                            println!("{line}");
+                        }
+                    }
+                    Err(err) => {
+                        let error_value = json!({"type": "error", "message": format!("{err:#}")});
+                        if let Ok(line) = serde_json::to_string(&error_value) {
+                            println!("{line}");
+                        }
+                        // Print final result line before returning
+                        let result_value =
+                            json!({"type": "result", "conversation_id": conversation_id});
+                        if let Ok(line) = serde_json::to_string(&result_value) {
+                            println!("{line}");
+                        }
+                        return Err(err);
+                    }
                 }
             }
+
+            // Final result line
+            let result_value = json!({"type": "result", "conversation_id": conversation_id});
+            if let Ok(line) = serde_json::to_string(&result_value) {
+                println!("{line}");
+            }
+
+            Ok(())
+        } else {
+            // Default text output mode
+            let mut writer = StreamingWriter::new(self.spinner.clone(), self.api.clone());
+
+            while let Some(message) = stream.next().await {
+                match message {
+                    Ok(message) => self.handle_chat_response(message, &mut writer).await?,
+                    Err(err) => {
+                        writer.finish()?;
+                        self.spinner.stop(None)?;
+                        self.spinner.reset();
+                        return Err(err);
+                    }
+                }
+            }
+
+            writer.finish()?;
+            self.spinner.stop(None)?;
+            self.spinner.reset();
+
+            Ok(())
         }
-
-        writer.finish()?;
-        self.spinner.stop(None)?;
-        self.spinner.reset();
-
-        Ok(())
     }
 
     /// Fetches related conversations for a given conversation in parallel.
