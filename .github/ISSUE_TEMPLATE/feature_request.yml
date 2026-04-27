@@ -7,12 +7,12 @@ body:
     attributes:
       value: |
         Thanks for suggesting a new feature! 
-        
+
         **Before you continue, please ensure you can clearly answer:**
         1. **Why do you NEED this feature?** (Not just "nice to have")
         2. **What is NOT possible right now?** (Current limitations)
         3. **What WILL be possible with this feature?** (Concrete outcomes)
-        
+
         Vague or incomplete requests will be closed. Take your time to write a compelling case.
 
   - type: textarea
@@ -45,7 +45,7 @@ body:
         - [Specific action/workflow that fails]
         - [What happens when you try]
         - [Why existing features don't solve this]
-        
+
         I've tried:
         - [Workaround 1 and why it doesn't work]
         - [Workaround 2 and why it doesn't work]
@@ -65,7 +65,7 @@ body:
         - [Specific new capability 1]
         - [Specific new capability 2]
         - [Measurable improvement: time saved, errors reduced, etc.]
-        
+
         Example workflow:
         ```
         # Show the exact commands or steps you'll use
@@ -144,7 +144,7 @@ body:
     attributes:
       label: Additional Context
       description: Add any other context, screenshots, or examples about the feature request.
-  
+
   - type: checkboxes
     id: requirements-check
     attributes:

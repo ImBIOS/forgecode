@@ -54,6 +54,7 @@ Classify the PR into one of these categories:
 - **chore**: Maintenance tasks, dependencies, configuration
 
 Base this on:
+
 - Commit messages (keywords like "fix", "add", "optimize", "refactor")
 - Nature of code changes (new files = feature, test fixes = fix, etc.)
 - Scope of changes
@@ -64,24 +65,31 @@ Create a comprehensive description with this structure:
 
 ```markdown
 ## Summary
+
 [One sentence explaining what this PR does and why it matters]
 
 ## Context
+
 [Background information, related issues, previous work, or the problem being solved]
 
 ## Changes
+
 [High-level description of what changed]
 
 ### Key Implementation Details
+
 [Technical details that help reviewers understand the approach, especially for complex changes]
 
 ## Use Cases
+
 [Concrete examples of how this will be used - helps reviewers understand practical value]
 
 ## Testing
+
 [How to test the changes - step-by-step instructions]
 
 ## Links
+
 - Related issues: #123, #456
 - Documentation: URL (if applicable)
 - Original implementation: URL (if applicable)
@@ -90,18 +98,21 @@ Create a comprehensive description with this structure:
 ### Description Guidelines
 
 **Essential Elements:**
+
 - **Summary**: One clear sentence explaining the change and its value
 - **Context**: Why this change was needed, what problem it solves
 - **Changes**: What was actually changed at a high level
 - **Testing**: How reviewers can verify the changes
 
 **Optional but Recommended:**
+
 - **Implementation Details**: For complex changes, explain the technical approach
 - **Use Cases**: Concrete examples of how the feature will be used
 - **Links**: Related issues, documentation, papers, or original implementations
 - **Known Issues**: Any limitations or known problems
 
 **What to Avoid:**
+
 - Empty descriptions or just issue links
 - Placeholder text like "Fixes #(issue)"
 - File-by-file breakdowns (unless necessary)
@@ -113,28 +124,34 @@ Create a comprehensive description with this structure:
 
 **Example 1: Feature Addition**
 
-```markdown
+````markdown
 ## Summary
+
 Add semantic code search to enable searching codebase by concepts and behavior rather than exact string matching.
 
 ## Context
+
 Currently, users can only search using exact string matching, which makes it difficult to find code based on functionality or behavior. This has been a recurring request in issues #123 and #456.
 
 ## Changes
+
 - Implemented semantic search using vector embeddings
 - Integrated with existing search interface
 - Added support for multiple concurrent queries with result aggregation
 - Configurable search scope (entire codebase or specific directories)
 
 ### Key Implementation Details
+
 Uses OpenAI embeddings for code representation and cosine similarity for matching. Index is built incrementally to support large codebases. Search results are reranked based on code context and usage patterns.
 
 ## Use Cases
+
 - Find authentication flow without knowing exact function names
 - Locate retry logic across the codebase
 - Search for "database connection" patterns
 
 ## Testing
+
 ```bash
 # Run the search service
 npm run search:dev
@@ -144,11 +161,14 @@ curl -X POST http://localhost:3000/search \
   -H "Content-Type: application/json" \
   -d '{"query": "user authentication"}'
 ```
+````
 
 ## Links
+
 - Related issues: #123, #456
 - Documentation: /docs/semantic-search.md
-```
+
+````
 
 **Example 2: Bug Fix**
 
@@ -178,12 +198,14 @@ npm test -- tests/integration/connection-timeout.test.ts
 
 # Verify circuit breaker activation
 curl http://localhost:3000/health # Should return 503 after circuit opens
-```
+````
 
 ## Links
+
 - Related issues: #789, #890
 - Incident report: /incidents/2024-01-15-db-timeout.md
-```
+
+````
 
 **Example 3: Performance Improvement**
 
@@ -218,12 +240,14 @@ node tests/performance/large-files.test.js
 
 # Verify memory usage
 node --inspect tests/memory-usage.js
-```
+````
 
 ## Links
+
 - Related issues: #456
 - Performance report: /docs/performance/2024-01-image-processing.md
-```
+
+````
 
 **Example 4: Refactor**
 
@@ -258,12 +282,14 @@ npm test tests/integration/auth/
 
 # Verify all existing functionality still works
 npm run e2e
-```
+````
 
 ## Links
+
 - Related issues: #234
 - Architecture doc: /docs/architecture/auth-module.md
-```
+
+````
 
 **Example 5: Simple Fix (Minimal but Complete)**
 
@@ -285,11 +311,13 @@ npm test tests/unit/email-templates.test.ts
 
 # Verify email renders correctly
 npm run test:email --template=welcome
-```
+````
 
 ## Links
+
 - Related issues: #567
-```
+
+````
 
 ### 5. Create Pull Request
 
@@ -298,11 +326,12 @@ Write the description to a temporary file and use GitHub CLI to create the PR:
 **Step 1: Write description to temp file**
 ```bash
 # Write the generated description to .forge/FORGE_PR_DESCRIPTION.md
-```
+````
 
 Use the `write` tool to create `.forge/FORGE_PR_DESCRIPTION.md` with the generated description content.
 
 **Step 2: Create PR using the temp file**
+
 ```bash
 gh pr create --title "[Change Type]: [One-line summary]" --body-file .forge/FORGE_PR_DESCRIPTION.md
 ```
@@ -314,6 +343,7 @@ The `gh` CLI is pre-installed and authenticated - use it directly without prompt
 ### 6. Confirm
 
 After creating the PR, provide the user with:
+
 - PR URL
 - Change type
 - Brief summary of what was included
@@ -321,6 +351,7 @@ After creating the PR, provide the user with:
 ## Notes
 
 **Key Principles:**
+
 - **Context matters**: Explain why the change was made, not just what changed
 - **Use cases help**: Concrete examples make abstract changes understandable
 - **Testing is essential**: Always include how to verify the changes
@@ -329,6 +360,7 @@ After creating the PR, provide the user with:
 - **Respect reviewers' time**: A good description reduces review effort
 
 **Anti-Patterns to Avoid:**
+
 - Empty descriptions or just issue links
 - Placeholder text like "Fixes #(issue)"
 - File-by-file breakdowns (unless necessary)
@@ -337,6 +369,7 @@ After creating the PR, provide the user with:
 
 **When to Keep It Simple:**
 For very small, obvious changes (typo fixes, trivial refactors), you can use a shorter structure:
+
 - Summary
 - Context (brief)
 - Testing
@@ -344,6 +377,7 @@ For very small, obvious changes (typo fixes, trivial refactors), you can use a s
 But never skip the testing instructions.
 
 **When to Be Comprehensive:**
+
 - New features or major functionality
 - Complex technical changes
 - Performance improvements or optimizations

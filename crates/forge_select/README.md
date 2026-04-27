@@ -64,6 +64,7 @@ let selected = ForgeSelect::multi_select("Choose colors:", options)
 ### Builder Pattern
 
 All prompt types use a builder pattern for configuration:
+
 - Create the builder with `ForgeSelect::select()`, `ForgeSelect::confirm()`, etc.
 - Configure options with `.with_*()` methods
 - Execute with `.prompt()`
@@ -71,6 +72,7 @@ All prompt types use a builder pattern for configuration:
 ### Ownership vs Clone
 
 Two variants for select operations:
+
 - `select()`: Requires `Clone` for options, useful when you need the list after selection
 - `select_owned()`: Takes ownership, no `Clone` required, more efficient
 
@@ -81,6 +83,7 @@ All prompts use a consistent `ColorfulTheme` from dialoguer, providing a unified
 ## Integration
 
 This crate is used by:
+
 - `forge_main`: For CLI user interactions
 - `forge_infra`: For implementing the `UserInfra` trait
 

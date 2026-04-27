@@ -71,6 +71,7 @@ Every tool must be registered in the `crates/forge_services/src/tools/registry.r
 ## Why the Good Description Works Better
 
 The good description clearly explains:
+
 - What the tool does (retrieves the current stock price)
 - What data format it returns (latest trade price in USD)
 - When to use it (when the user asks about current/recent price)

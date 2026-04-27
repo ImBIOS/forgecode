@@ -48,6 +48,7 @@ use crate::domain::{Account, User};
 ```
 
 **Key principles:**
+
 - Combine all unique imports
 - Remove duplicates
 - Follow language-specific style (group by module, alphabetize)
@@ -125,6 +126,7 @@ fn setup() -> TestContext {
 ```
 
 **Key principles:**
+
 - Keep all test cases unless they test the exact same thing
 - Merge test fixtures and setup functions
 - If test names conflict but test different things, rename one
@@ -161,6 +163,7 @@ poetry lock --no-update
 ```
 
 **Key principles:**
+
 - Always regenerate, never manually merge
 - Choose either version (--ours or --theirs), doesn't matter
 - Run the package manager's update/install command
@@ -193,12 +196,13 @@ server:
 ```yaml
 server:
   port: 8080
-  timeout: 60  # Prefer the newer/safer value
+  timeout: 60 # Prefer the newer/safer value
   max_connections: 100
   enable_https: true
 ```
 
 **Key principles:**
+
 - Include all configuration keys from both sides
 - When same key has different values, choose based on:
   - Newer value (if timestamp available)
@@ -209,6 +213,7 @@ server:
 **One-line explanation example**: "Merging all config keys and choosing incoming value for 'timeout' as it's more recent."
 
 **When to ask the user**: If conflicting values have significant implications (e.g., security settings, API endpoints), present options:
+
 ```
 Config conflict in config.yaml for key 'timeout':
 
@@ -277,6 +282,7 @@ fn calculate_price(item: &Item) -> f64 {
 ```
 
 **Resolution:** Analyze which approach is correct:
+
 - Review PR/commit messages for context
 - Check which calculation matches business requirements
 - Consider running tests with both approaches
@@ -346,6 +352,7 @@ pub struct User {
 ```
 
 **Key principles:**
+
 - Include all fields from both sides
 - If field types conflict, analyze which is more appropriate
 - Update all usages of the struct accordingly
@@ -354,6 +361,7 @@ pub struct User {
 **One-line explanation example**: "Including all fields from both branches in User struct."
 
 **When to ask the user**: If the same field has different types:
+
 ```
 Struct conflict - field 'role' has different types:
 
@@ -373,12 +381,12 @@ Merge all documentation improvements.
 ```
 <<<<<<< HEAD
 /// Processes user input and returns validated data.
-/// 
+///
 /// # Arguments
 /// * `input` - The raw user input
 =======
 /// Processes user input and returns validated data.
-/// 
+///
 /// # Errors
 /// Returns `Error::InvalidInput` if validation fails
 >>>>>>> branch
@@ -388,15 +396,16 @@ Merge all documentation improvements.
 
 ```
 /// Processes user input and returns validated data.
-/// 
+///
 /// # Arguments
 /// * `input` - The raw user input
-/// 
+///
 /// # Errors
 /// Returns `Error::InvalidInput` if validation fails
 ```
 
 **Key principles:**
+
 - Preserve all documentation sections
 - If descriptions conflict, choose the more accurate/detailed one
 - Keep all examples from both sides

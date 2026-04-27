@@ -24,24 +24,18 @@ const EvaluationSchema = z.object({
       .min(0)
       .max(15)
       .describe("Score for the embedding query quality (0-15)"),
-    embedding_query_feedback: z
-      .string()
-      .describe("Specific feedback on the embedding query"),
+    embedding_query_feedback: z.string().describe("Specific feedback on the embedding query"),
     reranking_query_score: z
       .number()
       .min(0)
       .max(15)
       .describe("Score for the reranking query quality (0-15)"),
-    reranking_query_feedback: z
-      .string()
-      .describe("Specific feedback on the reranking query"),
+    reranking_query_feedback: z.string().describe("Specific feedback on the reranking query"),
     construct_keywords_score: z
       .number()
       .min(0)
       .max(10)
-      .describe(
-        "Score for codebase construct keywords in reranking query (0-10)",
-      ),
+      .describe("Score for codebase construct keywords in reranking query (0-10)"),
     construct_keywords_feedback: z
       .string()
       .describe(
@@ -49,9 +43,7 @@ const EvaluationSchema = z.object({
       ),
     queries_differentiated: z
       .boolean()
-      .describe(
-        "Whether the embedding and reranking queries are sufficiently different",
-      ),
+      .describe("Whether the embedding and reranking queries are sufficiently different"),
   }),
   result_relevance: z.object({
     intent_match_score: z
@@ -59,9 +51,7 @@ const EvaluationSchema = z.object({
       .min(0)
       .max(25)
       .describe("How well results match the stated intent (0-25)"),
-    intent_match_feedback: z
-      .string()
-      .describe("Explanation of intent matching"),
+    intent_match_feedback: z.string().describe("Explanation of intent matching"),
     file_type_accuracy_score: z
       .number()
       .min(0)
@@ -76,20 +66,10 @@ const EvaluationSchema = z.object({
     avoidance_feedback: z.string().describe("Feedback on file type avoidance"),
   }),
   overall: z.object({
-    passed: z
-      .boolean()
-      .describe("Whether the search quality passes the evaluation"),
-    total_score: z
-      .number()
-      .min(0)
-      .max(100)
-      .describe("Total score (0-100)"),
-    summary: z
-      .string()
-      .describe("Brief summary of the evaluation (2-3 sentences)"),
-    critical_issues: z
-      .array(z.string())
-      .describe("List of critical issues that caused failure"),
+    passed: z.boolean().describe("Whether the search quality passes the evaluation"),
+    total_score: z.number().min(0).max(100).describe("Total score (0-100)"),
+    summary: z.string().describe("Brief summary of the evaluation (2-3 sentences)"),
+    critical_issues: z.array(z.string()).describe("List of critical issues that caused failure"),
   }),
 });
 
@@ -131,12 +111,7 @@ function parseArgs(): Args {
     }
   }
 
-  if (
-    !parsed.context ||
-    !parsed.intent ||
-    !parsed.expected_file_types ||
-    !parsed.should_avoid
-  ) {
+  if (!parsed.context || !parsed.intent || !parsed.expected_file_types || !parsed.should_avoid) {
     console.error("Missing required arguments");
     console.error(
       "Usage: llm_judge.ts --context <file> --intent <intent> --expected-file-types <types> --should-avoid <types>",
@@ -203,10 +178,14 @@ The search should primarily return files of these types: ${expectedFileTypes}
 The search should avoid returning files of these types: ${shouldAvoid}
 
 ## Semantic Search Queries Generated
-${searches.map((s, i) => `### Query ${i + 1}
+${searches
+  .map(
+    (s, i) => `### Query ${i + 1}
 **Embedding Query (for vector search):** ${s.query}
 **Reranking Query (for result filtering):** ${s.use_case}
-`).join("\n")}
+`,
+  )
+  .join("\n")}
 
 ## Evaluation Criteria
 
@@ -309,17 +288,11 @@ function formatEvaluation(evaluation: Evaluation): string {
 
   // Query Quality
   lines.push("## Query Quality");
-  lines.push(
-    `Embedding Query: ${evaluation.query_quality.embedding_query_score}/15`,
-  );
+  lines.push(`Embedding Query: ${evaluation.query_quality.embedding_query_score}/15`);
   lines.push(`  ${evaluation.query_quality.embedding_query_feedback}`);
-  lines.push(
-    `Reranking Query: ${evaluation.query_quality.reranking_query_score}/15`,
-  );
+  lines.push(`Reranking Query: ${evaluation.query_quality.reranking_query_score}/15`);
   lines.push(`  ${evaluation.query_quality.reranking_query_feedback}`);
-  lines.push(
-    `Construct Keywords: ${evaluation.query_quality.construct_keywords_score}/10`,
-  );
+  lines.push(`Construct Keywords: ${evaluation.query_quality.construct_keywords_score}/10`);
   lines.push(`  ${evaluation.query_quality.construct_keywords_feedback}`);
   lines.push(
     `Queries Differentiated: ${evaluation.query_quality.queries_differentiated ? "✓ Yes" : "✗ No"}`,
@@ -328,17 +301,11 @@ function formatEvaluation(evaluation: Evaluation): string {
 
   // Result Relevance
   lines.push("## Result Relevance");
-  lines.push(
-    `Intent Match: ${evaluation.result_relevance.intent_match_score}/25`,
-  );
+  lines.push(`Intent Match: ${evaluation.result_relevance.intent_match_score}/25`);
   lines.push(`  ${evaluation.result_relevance.intent_match_feedback}`);
-  lines.push(
-    `File Type Accuracy: ${evaluation.result_relevance.file_type_accuracy_score}/20`,
-  );
+  lines.push(`File Type Accuracy: ${evaluation.result_relevance.file_type_accuracy_score}/20`);
   lines.push(`  ${evaluation.result_relevance.file_type_feedback}`);
-  lines.push(
-    `Avoidance Compliance: ${evaluation.result_relevance.avoidance_compliance_score}/15`,
-  );
+  lines.push(`Avoidance Compliance: ${evaluation.result_relevance.avoidance_compliance_score}/15`);
   lines.push(`  ${evaluation.result_relevance.avoidance_feedback}`);
   lines.push("");
 

@@ -40,35 +40,33 @@ function loadCsvData(csvContent: string): Record<string, string>[] {
 /**
  * Creates a cross product of multiple data arrays (internal helper)
  */
-function createCrossProduct(
-  sourcesData: Record<string, string>[][]
-): Record<string, string>[] {
+function createCrossProduct(sourcesData: Record<string, string>[][]): Record<string, string>[] {
   if (sourcesData.length === 0) {
     return [];
   }
 
-  return sourcesData.reduce((acc, sourceData) => {
-    if (acc.length === 0) {
-      return sourceData;
-    }
-
-    const result: Record<string, string>[] = [];
-    for (const accItem of acc) {
-      for (const sourceItem of sourceData) {
-        result.push({ ...accItem, ...sourceItem });
+  return sourcesData.reduce(
+    (acc, sourceData) => {
+      if (acc.length === 0) {
+        return sourceData;
       }
-    }
-    return result;
-  }, [] as Record<string, string>[]);
+
+      const result: Record<string, string>[] = [];
+      for (const accItem of acc) {
+        for (const sourceItem of sourceData) {
+          result.push({ ...accItem, ...sourceItem });
+        }
+      }
+      return result;
+    },
+    [] as Record<string, string>[],
+  );
 }
 
 /**
  * Generates a command from a template and data context
  */
-export function generateCommand(
-  commandTemplate: string,
-  context: Record<string, string>
-): string {
+export function generateCommand(commandTemplate: string, context: Record<string, string>): string {
   const template = Handlebars.compile(commandTemplate, {
     strict: true,
   });
@@ -80,19 +78,17 @@ export function generateCommand(
  */
 function generateCommands(
   commandTemplate: string,
-  sourcesData: Record<string, string>[][]
+  sourcesData: Record<string, string>[][],
 ): string[] {
   const crossProduct = createCrossProduct(sourcesData);
-  return crossProduct.map((context) =>
-    generateCommand(commandTemplate, context)
-  );
+  return crossProduct.map((context) => generateCommand(commandTemplate, context));
 }
 
 /**
  * Pure function to get contexts from sources data
  */
 export function getContextsFromSources(
-  sourcesData: Record<string, string>[][]
+  sourcesData: Record<string, string>[][],
 ): Record<string, string>[] {
   return createCrossProduct(sourcesData);
 }

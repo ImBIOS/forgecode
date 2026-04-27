@@ -5,6 +5,7 @@
 Currently, `ForgeConfig` is read lazily from disk inside `ForgeEnvironmentInfra` and any parse/deserialization errors are silently swallowed — returning `ForgeConfig::default()` (all-zero values) with only a tracing log that the user never sees. This causes silent breakage of all tool limits and agent parameters when the user's config file is corrupt or invalid.
 
 The goal is to:
+
 1. Read `ForgeConfig` **once at application startup** in `main.rs`, surfacing any parse error directly to the user before the app proceeds.
 2. Pass the pre-read config through the construction chain to every consumer.
 3. **Remove `get_config()` from the `EnvironmentInfra` trait** entirely — it is no longer needed since config is injected at construction time.
@@ -60,7 +61,7 @@ The cleanest resolution: `update_environment` returns the updated `ForgeConfig` 
 
 ### Phase 1 — Surface Config Errors in `ForgeConfig::read()`
 
-- [~] Task 1.1. **Fix silent error in `ConfigReader::read_global()`** (`crates/forge_config/src/reader.rs`): The `.required(false)` flag on `config::File::from(path)` silently swallows parse errors for malformed TOML files. Change this so that if the file *exists* but is invalid (e.g., malformed TOML, wrong types), an error is returned. Only missing files should be silently skipped. This may require checking file existence before adding the `config` source, or using a custom file reader that returns `Err` on parse failure but `Ok` on file-not-found.
+- [~] Task 1.1. **Fix silent error in `ConfigReader::read_global()`** (`crates/forge_config/src/reader.rs`): The `.required(false)` flag on `config::File::from(path)` silently swallows parse errors for malformed TOML files. Change this so that if the file _exists_ but is invalid (e.g., malformed TOML, wrong types), an error is returned. Only missing files should be silently skipped. This may require checking file existence before adding the `config` source, or using a custom file reader that returns `Err` on parse failure but `Ok` on file-not-found.
 
 - [ ] Task 1.2. **Fix silent skip in `ConfigReader::read_legacy()`** (`crates/forge_config/src/reader.rs`): Currently uses `if let Ok(content) = content { ... } else { self }` — silently ignores errors. Change to at minimum emit a `warn!` log message, or propagate the error. Since legacy JSON is a migration concern, a `warn!` is appropriate rather than a hard error.
 
@@ -105,7 +106,7 @@ The `/new` closure captures `ForgeConfig` at startup. After `update_environment`
   Adjust `UI<A, F>` struct and `UI::init` accordingly:
   - Change the `F` bound from `Fn() -> A` to `Fn(ForgeConfig) -> A`
   - Update `main.rs` closure from `move || ForgeAPI::init(cwd.clone())` to `move |config| ForgeAPI::init(cwd.clone(), config)`
-  - Update `on_new` to call `(self.new_api)(self.api.get_config())` 
+  - Update `on_new` to call `(self.new_api)(self.api.get_config())`
 
   > This preserves `get_config()` on the `API` trait (not `EnvironmentInfra`) for this specific use case. The `API` trait's `get_config()` can delegate to the stored infra's cache (same as today), but the `EnvironmentInfra` trait no longer exposes it.
 

@@ -36,7 +36,7 @@ export class GitHubRestApi implements GitHubApi {
   constructor(
     private readonly owner: string,
     private readonly repo: string,
-    token: string
+    token: string,
   ) {
     this.base = `https://api.github.com/repos/${owner}/${repo}`;
     this.headers = {
@@ -80,7 +80,7 @@ export class GitHubRestApi implements GitHubApi {
     while (true) {
       const batch = await this.request<Issue[]>(
         "GET",
-        `/issues?state=open&per_page=100&page=${page}`
+        `/issues?state=open&per_page=100&page=${page}`,
       );
       if (batch.length === 0) break;
       for (const issue of batch) {

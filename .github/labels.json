@@ -156,23 +156,13 @@
     "name": "type: fix",
     "color": "FA1DD4",
     "description": "Iterations on existing features or infrastructure.",
-    "aliases": [
-      "fix",
-      "improvement",
-      "optimization",
-      "Type: Fix",
-      "bug"
-    ]
+    "aliases": ["fix", "improvement", "optimization", "Type: Fix", "bug"]
   },
   {
     "name": "type: refactor",
     "color": "FA1DD4",
     "description": "Code refactoring and restructuring.",
-    "aliases": [
-      "refactor",
-      "Type: Refactoring",
-      "refactoring"
-    ]
+    "aliases": ["refactor", "Type: Refactoring", "refactoring"]
   },
   {
     "name": "type: security",

@@ -18,11 +18,7 @@ export type ValidationResult = {
 /**
  * Validates output against a regex pattern
  */
-function validateRegex(
-  output: string,
-  regex: string,
-  name: string,
-): ValidationResult {
+function validateRegex(output: string, regex: string, name: string): ValidationResult {
   const pattern = new RegExp(regex);
   const passed = pattern.test(output);
 
@@ -137,14 +133,7 @@ export async function runValidations(
         command = template(context);
       }
       const expectedExitCode = validation.exit_code ?? 0;
-      results.push(
-        await validateShellCommand(
-          output,
-          command,
-          expectedExitCode,
-          validation.name,
-        ),
-      );
+      results.push(await validateShellCommand(output, command, expectedExitCode, validation.name));
     }
   }
 

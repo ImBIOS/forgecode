@@ -30,12 +30,12 @@ validations:
   # Primary validation: Should NOT use write with overwrite=true for refactoring
   - name: "Should NOT use write with overwrite=true"
     type: shell
-    command: "! jq -e '[.messages[]?.tool_calls[]? | select(.function.name == \"write\") | .function.arguments | fromjson | select(.overwrite == true)] | length > 0' {{dir}}/context.json"
+    command: '! jq -e ''[.messages[]?.tool_calls[]? | select(.function.name == "write") | .function.arguments | fromjson | select(.overwrite == true)] | length > 0'' {{dir}}/context.json'
 
   # Secondary validation: Should use patch tool for refactoring
   - name: "Should use patch tool"
     type: shell
-    command: "jq -e '[.messages[]?.tool_calls[]? | select(.function.name == \"patch\")] | length > 0' {{dir}}/context.json"
+    command: 'jq -e ''[.messages[]?.tool_calls[]? | select(.function.name == "patch")] | length > 0'' {{dir}}/context.json'
 
 sources:
   - value:

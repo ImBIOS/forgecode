@@ -47,7 +47,7 @@ function diff(
   current: Set<string>,
   desired: Set<string>,
   comment?: string,
-  meta?: { title?: string; url?: string }
+  meta?: { title?: string; url?: string },
 ): LabelOp | null {
   const add = [...desired].filter((l) => !current.has(l));
   const remove = [...current].filter((l) => !desired.has(l));

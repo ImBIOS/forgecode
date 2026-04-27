@@ -6,10 +6,12 @@ It also helps the user understand the progress of the task and overall progress 
 Each call sends only the items that changed — you do not need to repeat the whole list.
 
 Each item has two required fields:
+
 - `content`: The task description. This is the **unique key** — the server matches on content to decide whether to add or update.
 - `status`: One of `pending`, `in_progress`, `completed`, or `cancelled`.
 
 **Rules:**
+
 - Item with this `content` does **not** exist yet → **added** as a new task.
 - Item with this `content` already exists → its `status` is **updated**.
 - `status: cancelled` → the item is **removed** from the list entirely.
@@ -18,6 +20,7 @@ Each item has two required fields:
 IDs are managed internally by the system and are never exposed to you.
 
 ## When to Use This Tool
+
 Use this tool proactively in these scenarios:
 
 1. Complex multi-step tasks - When a task requires 3 or more distinct steps or actions
@@ -31,6 +34,7 @@ Use this tool proactively in these scenarios:
 ## When NOT to Use This Tool
 
 Skip using this tool when:
+
 1. There is only a single, straightforward task
 2. The task is trivial and tracking it provides no organizational benefit
 3. The task can be completed in less than 3 trivial steps
@@ -74,7 +78,6 @@ The assistant used the todo list because:
 4. This approach prevents missing any occurrences and maintains code consistency
 </reasoning>
 </example>
-
 
 <example>
 User: I need to implement these features for my e-commerce site: user registration, product catalog, shopping cart, and checkout flow.
@@ -147,7 +150,7 @@ The assistant did not use the todo list because this is a single, straightforwar
 User: Run npm install for me and tell me what happens.
 Assistant: I'll run the npm install command for you.
 
-*Executes: npm install*
+_Executes: npm install_
 
 The command completed successfully. Here's the output:
 [Output of npm install command]

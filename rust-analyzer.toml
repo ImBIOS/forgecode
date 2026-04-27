@@ -12,9 +12,7 @@ cargo.buildScripts.invocationLocation = "workspace"
 diagnostics.disabled = []
 diagnostics.warningsAsHint = []
 
-# Improve performance with large workspaces
-cargo.allTargets = false
-cargo.target = null
+cargo.target = nullcargo.allTargets = false# Improve performance with large workspaces
 
 # Enable all features for better analysis
 cargo.allFeatures = true

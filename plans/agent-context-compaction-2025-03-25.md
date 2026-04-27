@@ -26,7 +26,7 @@ fn identify_compressible_sequences(&self, context: &Context) -> Vec<(usize, usiz
     let messages = context.messages();
     let mut sequences = Vec::new();
     let mut current_sequence_start: Option<usize> = None;
-    
+
     for (i, message) in messages.iter().enumerate() {
         if message.is_assistant() {
             // Start a new sequence or continue current one
@@ -44,7 +44,7 @@ fn identify_compressible_sequences(&self, context: &Context) -> Vec<(usize, usiz
             }
         }
     }
-    
+
     // Check for a sequence at the end
     if let Some(start) = current_sequence_start {
         let end = messages.len() - 1;
@@ -52,7 +52,7 @@ fn identify_compressible_sequences(&self, context: &Context) -> Vec<(usize, usiz
             sequences.push((start, end));
         }
     }
-    
+
     sequences
 }
 ```
@@ -66,23 +66,23 @@ pub async fn compact_context(&self, agent: &Agent, context: Context) -> Result<C
     if !self.should_perform_compaction(agent, &context) {
         return Ok(context);
     }
-    
+
     debug!(
         agent_id = %agent.id,
         "Context compaction triggered"
     );
-    
+
     // Identify compressible sequences
     let sequences = self.identify_compressible_sequences(&context);
-    
+
     if sequences.is_empty() {
         debug!(agent_id = %agent.id, "No compressible sequences found");
         return Ok(context);
     }
-    
+
     // Process the compressible sequences and build new context
     let compacted_context = self.compress_context_sequences(agent, context, sequences).await?;
-    
+
     Ok(compacted_context)
 }
 ```
@@ -93,57 +93,57 @@ Create a method to handle the compression of identified sequences:
 
 ```rust
 async fn compress_context_sequences(
-    &self, 
-    agent: &Agent, 
-    original_context: Context, 
+    &self,
+    agent: &Agent,
+    original_context: Context,
     sequences: Vec<(usize, usize)>
 ) -> Result<Context> {
     let messages = original_context.messages();
     let mut compacted_messages = Vec::new();
-    
+
     let mut next_index = 0;
-    
+
     // Process each sequence
     for (start, end) in sequences {
         // Add any messages before this sequence
         compacted_messages.extend(messages[next_index..start].to_vec());
-        
+
         // Extract the sequence to summarize
         let sequence = &messages[start..=end];
-        
+
         // Only process if we have multiple assistant messages (safety check)
         if sequence.len() > 1 && sequence.iter().all(|m| m.is_assistant()) {
             // Generate summary for this sequence
             let summary = self.generate_summary_for_sequence(agent, sequence).await?;
-            
+
             // Add the summary as a single assistant message
             compacted_messages.push(ContextMessage::assistant(summary, None));
         } else {
             // If not eligible for compression, keep original messages
             compacted_messages.extend(sequence.to_vec());
         }
-        
+
         next_index = end + 1;
     }
-    
+
     // Add any remaining messages
     if next_index < messages.len() {
         compacted_messages.extend(messages[next_index..].to_vec());
     }
-    
+
     // Build the new context
     let mut compacted_context = Context::default();
-    
+
     // Add system message if present in original context
     if let Some(system_msg) = original_context.system_message() {
         compacted_context = compacted_context.set_first_system_message(system_msg.clone());
     }
-    
+
     // Add all the processed messages
     for msg in compacted_messages {
         compacted_context = compacted_context.add_message(msg);
     }
-    
+
     Ok(compacted_context)
 }
 ```
@@ -154,8 +154,8 @@ Create a method to generate summaries for specific sequences:
 
 ```rust
 async fn generate_summary_for_sequence(
-    &self, 
-    agent: &Agent, 
+    &self,
+    agent: &Agent,
     messages: &[ContextMessage]
 ) -> Result<String> {
     let compact = agent.compact.as_ref().unwrap();
@@ -165,7 +165,7 @@ async fn generate_summary_for_sequence(
     for msg in messages {
         sequence_context = sequence_context.add_message(msg.clone());
     }
-    
+
     // Render the summarization prompt
     let prompt = self
         .services

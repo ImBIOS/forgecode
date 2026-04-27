@@ -7,9 +7,10 @@ Migrate all tools from direct infrastructure dependencies to service-based archi
 ## Implementation Plan
 
 ### 1. **Analyze Current Tool Patterns and Dependencies**
+
 - Dependencies: None
 - Notes: Examine all existing tools to identify common patterns, infrastructure usage, and business logic that should be moved to services
-- Files: 
+- Files:
   - `crates/forge_services/src/tools/fs/file_info.rs`
   - `crates/forge_services/src/tools/fs/fs_find.rs`
   - `crates/forge_services/src/tools/fs/fs_list.rs`
@@ -26,14 +27,16 @@ Migrate all tools from direct infrastructure dependencies to service-based archi
 - Status: Not Started
 
 ### 2. **Design Service Interface Standards**
+
 - Dependencies: Task 1
 - Notes: Create standardized patterns for tool services including error handling, input validation, and output formatting. Define naming conventions and service trait structure. **Important**: Services must NOT use ToolCallContext - this is UI-specific and stays in tools. Services should be pure business logic with simple input/output. **Critical**: Services must use Infrastructure traits (FsReadService, FsWriteService, etc.) instead of direct tokio::fs calls.
-- Files: 
+- Files:
   - New service trait definitions in `crates/forge_services/src/`
   - Service interface documentation
 - Status: Not Started
 
 ### 3. **Create Generic Service Trait Template**
+
 - Dependencies: Task 2
 - Notes: Define a generic service trait pattern that can be applied to any tool, including async methods, error handling with anyhow::Result, and integration with existing Infrastructure
 - Files:
@@ -42,6 +45,7 @@ Migrate all tools from direct infrastructure dependencies to service-based archi
 - Status: Not Started
 
 ### 4. **Implement Service for Template Tool (FSRead as Example)**
+
 - Dependencies: Task 3
 - Notes: Create complete service implementation for FSRead tool as a **template example** that demonstrates the migration pattern. This is not the final implementation but a reference pattern to be applied to all tools. **Critical**: Service must NOT use ToolCallContext - extract only pure business logic. All UI concerns (titles, progress) remain in tool. **Important**: Service must use Infrastructure traits (FsReadService, etc.) instead of direct tokio::fs calls.
 - Files:
@@ -50,6 +54,7 @@ Migrate all tools from direct infrastructure dependencies to service-based archi
 - Status: Not Started
 
 ### 5. **Update Services Trait and ForgeServices (Template Pattern)**
+
 - Dependencies: Task 4
 - Notes: Add new FSReadService to main Services trait and implement it in ForgeServices struct as a **template pattern**. This demonstrates how any tool service should be integrated into the main service architecture.
 - Files:
@@ -58,6 +63,7 @@ Migrate all tools from direct infrastructure dependencies to service-based archi
 - Status: Not Started
 
 ### 6. **Refactor FSRead Tool Implementation (Template Pattern)**
+
 - Dependencies: Task 5
 - Notes: Convert FSRead tool to use FSReadService instead of direct infrastructure calls as a **template example**. This demonstrates how to make any tool a thin wrapper with single service call. The pattern shown here applies to all other tools. **Key**: Tool retains ToolCallContext for UI (titles, progress) but delegates all business logic to service.
 - Files:
@@ -65,6 +71,7 @@ Migrate all tools from direct infrastructure dependencies to service-based archi
 - Status: Not Started
 
 ### 7. **Update Tool Registry for Service Injection**
+
 - Dependencies: Task 6
 - Notes: Modify tool registration to inject service dependencies through the Services trait instead of raw Infrastructure
 - Files:
@@ -72,6 +79,7 @@ Migrate all tools from direct infrastructure dependencies to service-based archi
 - Status: Not Started
 
 ### 8. **Create Migration Template Documentation**
+
 - Dependencies: Task 7
 - Notes: Document the complete **generic pattern** for migrating any tool to service-based architecture, using the FSRead example as a reference. Include code templates, step-by-step instructions, and patterns that can be applied to any tool (shell, fetch, patch, etc.).
 - Files:
@@ -80,6 +88,7 @@ Migrate all tools from direct infrastructure dependencies to service-based archi
 - Status: Not Started
 
 ### 9. **Apply Migration Pattern to All Remaining Tools**
+
 - Dependencies: Task 8
 - Notes: Apply the **generic migration pattern** established with FSRead template to all remaining tools. Each tool follows the same pattern: create service, integrate into Services trait, refactor tool to use service.
 - Files:
@@ -98,6 +107,7 @@ Migrate all tools from direct infrastructure dependencies to service-based archi
 - Status: Not Started
 
 ### 10. **Validation and Testing**
+
 - Dependencies: Task 9
 - Notes: Ensure all migrated tools maintain functionality, test coverage is preserved, and new services have comprehensive tests following project testing standards. **Critical**: Migrate existing tests from tools to services - business logic tests move to service layer, UI/integration tests remain with tools.
 - Files:
@@ -111,6 +121,7 @@ Migrate all tools from direct infrastructure dependencies to service-based archi
 Track the progress of migrating each tool to service-based architecture:
 
 ### File System Tools
+
 - [ ] **file_info** - Get file metadata and information
 - [ ] **fs_find** - Search for files and directories
 - [ ] **fs_list** - List directory contents
@@ -120,22 +131,28 @@ Track the progress of migrating each tool to service-based architecture:
 - [ ] **fs_write** - Write content to files
 
 ### Network and External Tools
+
 - [ ] **fetch** - Fetch content from URLs
 
 ### Interactive and Workflow Tools
+
 - [ ] **followup** - Handle follow-up actions and suggestions
 
 ### Code and Content Processing Tools
+
 - [ ] **patch** - Apply patches and modifications to files
 
 ### System Tools
+
 - [ ] **shell** - Execute shell commands
 
 ### Registry and Meta Tools
+
 - [ ] **registry** - Tool registration and management
 - [ ] **mod** - Module and component operations
 
 Each tool migration should follow the **FSRead template pattern** and include:
+
 1. Service interface design and implementation (following FSRead service pattern) - **Services in `crates/forge_services/src/`**
 2. Tool refactoring to use service (following FSRead tool refactoring pattern) - **Tool keeps ToolCallContext for UI, service gets pure business logic**
 3. Service integration into Services trait (following FSRead integration pattern)
@@ -145,6 +162,7 @@ Each tool migration should follow the **FSRead template pattern** and include:
 **Note**: FSRead serves as the template example demonstrating the generic migration pattern. All other tools should follow the exact same pattern established by the FSRead implementation.
 
 **Critical Requirements**:
+
 - Services are defined in `crates/forge_services/src/` directory
 - Services must NOT use ToolCallContext - this is UI-specific and remains in tools
 - Services contain only pure business logic with simple input/output
@@ -169,22 +187,27 @@ Each tool migration should follow the **FSRead template pattern** and include:
 ## Potential Risks and Mitigations
 
 ### 1. **Breaking Changes to Tool Interface**
+
 **Risk**: Modifying tool constructors and registration could break existing code that depends on current tool instantiation patterns.
 **Mitigation**: Maintain backward compatibility by keeping existing tool constructors while adding service-based alternatives. Use feature flags or gradual migration approach.
 
 ### 2. **Service Dependency Complexity**
+
 **Risk**: Adding service layer could introduce circular dependencies or complex dependency injection chains.
 **Mitigation**: Design services to depend only on Infrastructure traits, not on other services. Keep service interfaces focused and minimal.
 
 ### 3. **Performance Overhead**
+
 **Risk**: Additional service layer could introduce performance overhead through extra abstraction.
 **Mitigation**: Ensure services are lightweight wrappers around infrastructure calls. Profile critical paths to verify no significant performance impact.
 
 ### 4. **Test Complexity**
+
 **Risk**: Mocking services for tool tests could become more complex than current infrastructure mocking.
 **Mitigation**: Create standardized service mocks and test utilities. Ensure service interfaces are designed for easy testing.
 
 ### 5. **Inconsistent Migration**
+
 **Risk**: Partial migration could result in inconsistent architecture with some tools using services and others using infrastructure directly.
 **Mitigation**: Complete migration of all core tools before considering the migration complete. Document clear guidelines for future tool development.
 

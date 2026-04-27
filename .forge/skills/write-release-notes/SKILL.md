@@ -21,6 +21,7 @@ bash .forge/skills/write-release-notes/scripts/fetch-release-data.sh <version> [
 - `[owner/repo]`: Optional. Defaults to the current repo detected via `gh repo view`.
 
 The script outputs two sections:
+
 - `### RELEASE METADATA ###` — tag name, publish date, release name, raw body
 - `### PR DETAILS ###` — one JSON object per PR with: `number`, `title`, `body`, `labels`, `author`, `mergedAt`, `url`
 
@@ -28,12 +29,12 @@ The script outputs two sections:
 
 Group PRs by their conventional commit prefix or label:
 
-| Category | Prefixes / Labels |
-|---|---|
-| Features | `feat`, `type: feature` |
-| Bug Fixes | `fix`, `type: fix` |
-| Performance | `perf` |
-| Refactors | `refactor` |
+| Category    | Prefixes / Labels                      |
+| ----------- | -------------------------------------- |
+| Features    | `feat`, `type: feature`                |
+| Bug Fixes   | `fix`, `type: fix`                     |
+| Performance | `perf`                                 |
+| Refactors   | `refactor`                             |
 | Maintenance | `chore`, `docs`, `ci`, `build`, `deps` |
 
 Dependency bumps (e.g. Dependabot PRs) go into Maintenance. Skip PRs with `error: "not found"`.
@@ -49,14 +50,15 @@ Produce a Markdown document with the following structure. Keep the tone **inform
 
 ## What's New
 
-[2-4 sentence narrative covering the biggest features and fixes. 
+[2-4 sentence narrative covering the biggest features and fixes.
 Describe what changed and what users can now do. Use active voice. Be factual but upbeat.]
 
 ## Highlights
 
 ### [Feature/Fix Category]
+
 **[PR Title rephrased as a clear description of the change]**
-[1-2 sentences expanding on the PR description. Explain what changed and what users can now do differently. 
+[1-2 sentences expanding on the PR description. Explain what changed and what users can now do differently.
 If the PR body has useful context, distill it. If empty, infer from the title.]
 
 [Repeat for each significant PR — skip pure chores/dep bumps unless noteworthy]
@@ -67,7 +69,7 @@ If the PR body has useful context, distill it. If empty, infer from the title.]
 
 ## Under the Hood
 
-[Brief paragraph or bullet list covering refactors, maintenance, and dep updates — 
+[Brief paragraph or bullet list covering refactors, maintenance, and dep updates —
 keep it light, acknowledge the work without boring the reader]
 
 ## Contributors
@@ -75,6 +77,7 @@ keep it light, acknowledge the work without boring the reader]
 A huge thank you to everyone who made this release happen: [list @handles — exclude bots like @dependabot]
 
 ---
+
 **Full changelog**: [GitHub Release link]
 ```
 
@@ -94,6 +97,7 @@ A huge thank you to everyone who made this release happen: [list @handles — ex
 ### 5. Contributors Filter
 
 Only include **external contributors** in the Contributors section — exclude the core team:
+
 - `@tusharmath`
 - `@amitksingh1490`
 - `@laststylebender14`
@@ -110,6 +114,7 @@ echo "<release notes>" | bash .forge/skills/write-release-notes/scripts/validate
 ```
 
 If it prints `FAIL`, trim the draft and re-run until it prints `PASS`:
+
 - Remove the Under the Hood section first
 - Consolidate Bug Fixes into a shorter bullet list
 - Shorten individual PR descriptions to one tight sentence

@@ -7,20 +7,22 @@ Extend the `AgentLoaderService` to load agents from both the existing `{HOME}/fo
 ## Implementation Plan
 
 ### Phase 1: Domain Layer Extensions
+
 - [x] Task 1. **Add CWD agent path method to Environment**
-  - Add `agent_cwd_path()` method to the `Environment` struct in `crates/forge_domain/src/env.rs` 
+  - Add `agent_cwd_path()` method to the `Environment` struct in `crates/forge_domain/src/env.rs`
   - Method should return `PathBuf::from(".forge/agents")` to point to the current working directory
   - Follow the same pattern as existing `agent_path()` method but use current directory as base
 
-- [x] Task 2. **Update EnvironmentInfra trait usage documentation**  
+- [x] Task 2. **Update EnvironmentInfra trait usage documentation**
   - Document that environments now support both global and project-local agent directories
   - Update any relevant comments or documentation strings in the trait definitions
 
 ### Phase 2: Service Layer Implementation
+
 - [x] Task 3. **Extend AgentLoaderService init method**
   - Modify `init()` method in `crates/forge_services/src/agent_loader.rs` to load from three sources instead of two
   - Keep existing built-in agents loading (`init_default()`)
-  - Keep existing custom agents loading from global directory (`init_custom()`)  
+  - Keep existing custom agents loading from global directory (`init_custom()`)
   - Add new CWD agents loading (`init_cwd()`) method call
 
 - [x] Task 4. **Implement init_cwd method**
@@ -38,6 +40,7 @@ Extend the `AgentLoaderService` to load agents from both the existing `{HOME}/fo
   - This order ensures built-in agents have precedence over custom ones
 
 ### Phase 3: Error Handling and Safety
+
 - [x] Task 6. **Add comprehensive error context**
   - Add context information to distinguish between global and CWD agent loading failures
   - Update error messages to specify which directory failed to load
@@ -48,7 +51,8 @@ Extend the `AgentLoaderService` to load agents from both the existing `{HOME}/fo
   - Later-loaded agents (CWD) should take precedence over earlier-loaded agents (global)
   - Document the precedence order: CWD Custom > Global Custom > Built-in
 
-### Phase 4: Testing Implementation  
+### Phase 4: Testing Implementation
+
 - [x] Task 8. **Add unit tests for agent_cwd_path**
   - Test that `Environment::agent_cwd_path()` returns correct path structure
   - Verify path resolution works independently from `agent_path()`
@@ -66,7 +70,8 @@ Extend the `AgentLoaderService` to load agents from both the existing `{HOME}/fo
   - Test error isolation - CWD loading failure doesn't break global loading
 
 ### Phase 5: Documentation and Validation
-- [x] Task 11. **Update service documentation**  
+
+- [x] Task 11. **Update service documentation**
   - Update docstrings in `AgentLoaderService` to reflect multiple directory support
   - Document the agent precedence order and directory resolution strategy
   - Add usage examples showing how CWD agents complement global agents
@@ -79,7 +84,7 @@ Extend the `AgentLoaderService` to load agents from both the existing `{HOME}/fo
 ## Verification Criteria
 
 - All existing built-in agents continue to load successfully from embedded sources
-- Global custom agents continue to load from `{HOME}/forge/agents/` directory  
+- Global custom agents continue to load from `{HOME}/forge/agents/` directory
 - CWD agents load from `.forge/agents/` directory when it exists
 - Missing `.forge/agents/` directory doesn't cause errors or prevent other agent loading
 - Agent precedence follows documented order: Built-in > Global > CWD

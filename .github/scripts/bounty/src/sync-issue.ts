@@ -22,16 +22,19 @@ import type { Patch } from "./types.js";
 /// or by invoking `gh auth token` as a fallback. Exits with an error if none
 /// can be found.
 export function resolveToken(flag: string | undefined): string {
-  const token = flag || process.env["GITHUB_TOKEN"] || (() => {
-    try {
-      return execSync("gh auth token", { encoding: "utf8" }).trim();
-    } catch {
-      return "";
-    }
-  })();
+  const token =
+    flag ||
+    process.env["GITHUB_TOKEN"] ||
+    (() => {
+      try {
+        return execSync("gh auth token", { encoding: "utf8" }).trim();
+      } catch {
+        return "";
+      }
+    })();
   if (!token) {
     console.error(
-      "Error: no GitHub token found. Pass --token, set GITHUB_TOKEN, or run `gh auth login`."
+      "Error: no GitHub token found. Pass --token, set GITHUB_TOKEN, or run `gh auth login`.",
     );
     process.exit(1);
   }
@@ -85,10 +88,12 @@ export function printPlan(patch: Patch, subject: string): void {
     console.log(`${chalk.green("✔")} ${chalk.bold(subject)}: already in sync — no changes needed.`);
     return;
   }
-  console.log(`${chalk.yellow("●")} ${chalk.bold(subject)}: plan (${chalk.bold(String(patch.ops.length))} target(s) to update)\n`);
+  console.log(
+    `${chalk.yellow("●")} ${chalk.bold(subject)}: plan (${chalk.bold(String(patch.ops.length))} target(s) to update)\n`,
+  );
   for (const op of patch.ops) {
     const title = op.title ? chalk.bold(` ${op.title}`) : "";
-    const href  = op.url   ? `\n    ${chalk.dim(chalk.blue(op.url))}` : "";
+    const href = op.url ? `\n    ${chalk.dim(chalk.blue(op.url))}` : "";
     console.log(`  ${chalk.cyan(`#${op.target}`)}${title}${href}`);
     if (op.add.length > 0)
       console.log(`    ${chalk.green("+")} add:     ${chalk.green(op.add.join(", "))}`);
@@ -108,7 +113,10 @@ if (process.argv[1] === url.fileURLToPath(import.meta.url)) {
   const argv = await yargs(hideBin(process.argv))
     .option("issue", { type: "number", demandOption: true, description: "Issue number" })
     .option("repo", { type: "string", demandOption: true, description: "owner/repo" })
-    .option("token", { type: "string", description: "GitHub token (falls back to GITHUB_TOKEN env var or `gh auth token`)" })
+    .option("token", {
+      type: "string",
+      description: "GitHub token (falls back to GITHUB_TOKEN env var or `gh auth token`)",
+    })
     .option("execute", {
       type: "boolean",
       default: false,

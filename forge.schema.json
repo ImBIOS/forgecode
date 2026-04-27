@@ -54,17 +54,11 @@
     },
     "custom_history_path": {
       "description": "Path to the conversation history file; defaults to the global history\nlocation when absent.",
-      "type": [
-        "string",
-        "null"
-      ]
+      "type": ["string", "null"]
     },
     "debug_requests": {
       "description": "Directory where debug request files are written; disabled when absent.",
-      "type": [
-        "string",
-        "null"
-      ]
+      "type": ["string", "null"]
     },
     "http": {
       "description": "HTTP client settings including proxy, TLS, and timeout configuration.",
@@ -149,10 +143,7 @@
     },
     "max_requests_per_turn": {
       "description": "Maximum number of requests that can be made in a single turn.",
-      "type": [
-        "integer",
-        "null"
-      ],
+      "type": ["integer", "null"],
       "format": "uint",
       "minimum": 0
     },
@@ -200,19 +191,13 @@
     },
     "max_tokens": {
       "description": "Maximum tokens the model may generate per response for all agents\n(1–100,000).",
-      "type": [
-        "integer",
-        "null"
-      ],
+      "type": ["integer", "null"],
       "format": "uint32",
       "minimum": 0
     },
     "max_tool_failure_per_turn": {
       "description": "Maximum tool failures per turn before the orchestrator forces\ncompletion.",
-      "type": [
-        "integer",
-        "null"
-      ],
+      "type": ["integer", "null"],
       "format": "uint",
       "minimum": 0
     },
@@ -326,10 +311,7 @@
     },
     "top_k": {
       "description": "Top-k vocabulary cutoff for all agents; restricts sampling to the k\nhighest-probability tokens (1–1000).",
-      "type": [
-        "integer",
-        "null"
-      ],
+      "type": ["integer", "null"],
       "format": "uint32",
       "minimum": 0
     },
@@ -393,35 +375,23 @@
         },
         "max_tokens": {
           "description": "Maximum number of tokens to keep after compaction",
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": ["integer", "null"],
           "format": "uint",
           "minimum": 0
         },
         "message_threshold": {
           "description": "Maximum number of messages before triggering compaction",
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": ["integer", "null"],
           "format": "uint",
           "minimum": 0
         },
         "model": {
           "description": "Model ID to use for compaction, useful when compacting with a\ncheaper/faster model. If not specified, the root level model will be\nused.",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "on_turn_end": {
           "description": "Whether to trigger compaction when the last message is from a user",
-          "type": [
-            "boolean",
-            "null"
-          ]
+          "type": ["boolean", "null"]
         },
         "retention_window": {
           "description": "Number of most recent messages to preserve during compaction.\nThese messages won't be considered for summarization. Works alongside\neviction_window - the more conservative limit (fewer messages to\ncompact) takes precedence.",
@@ -432,10 +402,7 @@
         },
         "token_threshold": {
           "description": "Maximum number of tokens before triggering compaction. This acts as an\nabsolute cap and is combined with\n`token_threshold_percentage` by taking the lower value.",
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": ["integer", "null"],
           "format": "uint",
           "minimum": 0
         },
@@ -452,10 +419,7 @@
         },
         "turn_threshold": {
           "description": "Maximum number of conversation turns before triggering compaction",
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": ["integer", "null"],
           "format": "uint",
           "minimum": 0
         }
@@ -523,10 +487,7 @@
         },
         "keep_alive_interval_secs": {
           "description": "Keep-alive interval in seconds",
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": ["integer", "null"],
           "format": "uint64",
           "minimum": 0
         },
@@ -584,10 +545,7 @@
         },
         "root_cert_paths": {
           "description": "Paths to root certificate files",
-          "type": [
-            "array",
-            "null"
-          ],
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
@@ -623,18 +581,12 @@
           "type": "string"
         }
       },
-      "required": [
-        "provider_id",
-        "model_id"
-      ]
+      "required": ["provider_id", "model_id"]
     },
     "ProviderAuthMethod": {
       "description": "Authentication method supported by a provider.\n\nOnly the simple (non-OAuth) methods are available here; providers that\nrequire OAuth device or authorization-code flows must be configured via the\nfile-based `provider.json` override instead.",
       "type": "string",
-      "enum": [
-        "api_key",
-        "google_adc"
-      ]
+      "enum": ["api_key", "google_adc"]
     },
     "ProviderEntry": {
       "description": "A single provider entry defined inline in `forge.toml`.\n\nInline providers are merged with the built-in provider list; entries with\nthe same `id` override the corresponding built-in entry field-by-field,\nwhile entries with a new `id` are appended to the list.",
@@ -642,10 +594,7 @@
       "properties": {
         "api_key_var": {
           "description": "Environment variable holding the API key for this provider.",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "auth_methods": {
           "description": "Authentication methods supported by this provider; defaults to\n`[\"api_key\"]` when omitted.",
@@ -656,10 +605,7 @@
         },
         "custom_headers": {
           "description": "Additional HTTP headers sent with every request to this provider.",
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": ["object", "null"],
           "additionalProperties": {
             "type": "string"
           }
@@ -670,10 +616,7 @@
         },
         "models": {
           "description": "URL template for fetching the model list; may contain `{{VAR}}`\nplaceholders.",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "provider_type": {
           "description": "Provider category; defaults to `llm` when omitted.",
@@ -709,22 +652,12 @@
           }
         }
       },
-      "required": [
-        "id",
-        "url"
-      ]
+      "required": ["id", "url"]
     },
     "ProviderResponseType": {
       "description": "Wire protocol a provider uses for chat completions.",
       "type": "string",
-      "enum": [
-        "OpenAI",
-        "OpenAIResponses",
-        "Anthropic",
-        "Bedrock",
-        "Google",
-        "OpenCode"
-      ]
+      "enum": ["OpenAI", "OpenAIResponses", "Anthropic", "Bedrock", "Google", "OpenCode"]
     },
     "ProviderTypeEntry": {
       "description": "Category of a provider.",
@@ -757,9 +690,7 @@
           }
         }
       },
-      "required": [
-        "name"
-      ]
+      "required": ["name"]
     },
     "ReasoningConfig": {
       "description": "Controls the reasoning behaviour of a model, including effort level, token\nbudget, and visibility of the thinking process.",
@@ -778,24 +709,15 @@
         },
         "enabled": {
           "description": "Enables reasoning at the \"medium\" effort level with no exclusions.\nSupported by openrouter, anthropic, and forge provider.",
-          "type": [
-            "boolean",
-            "null"
-          ]
+          "type": ["boolean", "null"]
         },
         "exclude": {
           "description": "When true, the model thinks deeply but the reasoning is hidden from the\ncaller. Supported by openrouter and forge provider.",
-          "type": [
-            "boolean",
-            "null"
-          ]
+          "type": ["boolean", "null"]
         },
         "max_tokens": {
           "description": "Controls how many tokens the model can spend thinking.\nShould be greater than 1024 but less than the overall max_tokens.\nSupported by openrouter, anthropic, and forge provider.",
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": ["integer", "null"],
           "format": "uint",
           "minimum": 0
         }
@@ -825,10 +747,7 @@
         },
         "max_delay_secs": {
           "description": "Maximum delay between retries in seconds",
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": ["integer", "null"],
           "format": "uint64",
           "minimum": 0
         },
@@ -865,20 +784,12 @@
     "TlsBackend": {
       "description": "TLS backend option.",
       "type": "string",
-      "enum": [
-        "default",
-        "rustls"
-      ]
+      "enum": ["default", "rustls"]
     },
     "TlsVersion": {
       "description": "TLS version enum for configuring TLS protocol versions.",
       "type": "string",
-      "enum": [
-        "1.0",
-        "1.1",
-        "1.2",
-        "1.3"
-      ]
+      "enum": ["1.0", "1.1", "1.2", "1.3"]
     },
     "Update": {
       "description": "Configuration for automatic forge updates",
@@ -886,10 +797,7 @@
       "properties": {
         "auto_update": {
           "description": "Whether to automatically install updates without prompting",
-          "type": [
-            "boolean",
-            "null"
-          ]
+          "type": ["boolean", "null"]
         },
         "frequency": {
           "description": "How frequently forge checks for updates",
@@ -907,11 +815,7 @@
     "UpdateFrequency": {
       "description": "Frequency at which forge checks for updates",
       "type": "string",
-      "enum": [
-        "daily",
-        "weekly",
-        "always"
-      ]
+      "enum": ["daily", "weekly", "always"]
     },
     "double": {
       "type": "number",

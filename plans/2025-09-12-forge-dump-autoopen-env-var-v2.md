@@ -18,6 +18,7 @@ Based on the GitHub issue (#1201) analysis and updated requirements:
 **Current Implementation Location**: `crates/forge_main/src/ui.rs:721-740`
 
 **Environment Service Architecture**: The codebase uses a layered service architecture:
+
 - `Environment` struct in `crates/forge_domain/src/env.rs:18` contains configuration fields
 - `EnvironmentInfra` trait in `crates/forge_infra/src/env.rs:107-108` handles environment variable access
 - Environment variables are parsed during initialization in `crates/forge_infra/src/env.rs:39-71`
@@ -118,6 +119,7 @@ Based on the GitHub issue (#1201) analysis and updated requirements:
 ## Technical Implementation Details
 
 **Environment Struct Field Addition:**
+
 ```rust
 // In crates/forge_domain/src/env.rs
 #[derive(Clone, Debug, Setters)]
@@ -128,6 +130,7 @@ pub struct Environment {
 ```
 
 **Environment Variable Parsing:**
+
 ```rust
 // In crates/forge_infra/src/env.rs get() method
 let auto_open_dump = parse_env::<bool>("FORGE_DUMP_AUTO_OPEN").unwrap_or(false);
@@ -139,6 +142,7 @@ Environment {
 ```
 
 **UI Integration:**
+
 ```rust
 // In crates/forge_main/src/ui.rs dump methods
 if self.api.environment().auto_open_dump {
@@ -149,7 +153,8 @@ if self.api.environment().auto_open_dump {
 ```
 
 **README Documentation Pattern:**
-```markdown
+
+````markdown
 <details>
 <summary><strong>Tool Configuration</strong></summary>
 
@@ -160,6 +165,7 @@ Configuring the tool calls settings:
 FORGE_TOOL_TIMEOUT=300         # Maximum execution time in seconds for a tool (default: 300)
 FORGE_DUMP_AUTO_OPEN=false     # Automatically open dump files in browser (default: false)
 ```
+````
 
 </details>
 ```

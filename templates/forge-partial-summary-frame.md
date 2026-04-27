@@ -3,13 +3,16 @@ Use the following summary frames as the authoritative reference for all coding s
 ## Summary
 
 {{#each messages}}
+
 ### {{inc @index}}. {{role}}
 
 {{#each contents}}
 {{#if text}}
-````
+
+```
 {{text}}
-````
+```
+
 {{/if}}
 {{~#if tool_call}}
 {{#if tool_call.tool.file_update}}
@@ -25,34 +28,38 @@ Use the following summary frames as the authoritative reference for all coding s
 {{else if tool_call.tool.sem_search}}
 **Semantic Search:**
 {{#each tool_call.tool.sem_search.queries}}
+
 - `{{use_case}}`
-{{/each}}
-{{else if tool_call.tool.shell}}
-**Execute:** 
+  {{/each}}
+  {{else if tool_call.tool.shell}}
+  **Execute:**
+
 ```
 {{tool_call.tool.shell.command}}
 ```
+
 {{else if tool_call.tool.mcp}}
 **MCP:** `{{tool_call.tool.mcp.name}}`
 {{else if tool_call.tool.todo_write}}
 **Task Plan:**
 {{#each tool_call.tool.todo_write.changes}}
 {{#if (eq kind "added")}}
+
 - [ADD] {{todo.content}}
-{{else if (eq kind "updated")}}
-{{#if (eq todo.status "completed")}}
+  {{else if (eq kind "updated")}}
+  {{#if (eq todo.status "completed")}}
 - [DONE] ~~{{todo.content}}~~
-{{else if (eq todo.status "in_progress")}}
+  {{else if (eq todo.status "in_progress")}}
 - [IN_PROGRESS] {{todo.content}}
-{{else}}
+  {{else}}
 - [UPDATE] {{todo.content}}
-{{/if}}
-{{else if (eq kind "removed")}}
+  {{/if}}
+  {{else if (eq kind "removed")}}
 - [CANCELLED] ~~{{todo.content}}~~
-{{/if}}
-{{/each}}
-{{/if~}}
-{{/if~}}
+  {{/if}}
+  {{/each}}
+  {{/if~}}
+  {{/if~}}
 
 {{/each}}
 

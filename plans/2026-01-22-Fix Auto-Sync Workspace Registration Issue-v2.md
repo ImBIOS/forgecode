@@ -52,6 +52,7 @@ Prevent auto-sync from creating unintended workspace registrations while maintai
 ## Verification Criteria
 
 ### Before Fix
+
 - [ ] Run `cd /Users/username` (parent directory)
 - [ ] Run `forge workspace sync` once
 - [ ] Run `cd /Users/username/Documents/Projects/forge` (subdirectory)
@@ -60,6 +61,7 @@ Prevent auto-sync from creating unintended workspace registrations while maintai
 - [ ] Verify: `/Users/username/Documents/Projects/forge` is incorrectly registered as a workspace
 
 ### After Fix
+
 - [ ] Clean database and repeat above steps
 - [ ] Run `cd /Users/username/Documents/Projects/forge`
 - [ ] Trigger zsh accept-line (press Enter)
@@ -70,6 +72,7 @@ Prevent auto-sync from creating unintended workspace registrations while maintai
 - [ ] Verify: Now subdirectory is registered and will auto-sync on future visits
 
 ### Edge Cases
+
 - [ ] Test behavior when no workspace exists at all (should not auto-sync)
 - [ ] Test `forge workspace info` with `--porcelain` flag returns correct exit codes
 - [ ] Test behavior in deeply nested directories (should find closest ancestor)
@@ -81,12 +84,15 @@ Prevent auto-sync from creating unintended workspace registrations while maintai
 ## Potential Risks and Mitigations
 
 ### Risk 1: Breaking Existing User Workflows
+
 **Mitigation:** Users who rely on automatic workspace creation will need to run `forge workspace sync` once per workspace. This is a one-time migration cost for better UX long-term.
 
 ### Risk 2: Performance Impact
+
 **Mitigation:** The `workspace info --porcelain` check reuses existing `get_workspace_info()` which is already fast. Negligible overhead.
 
 ### Risk 3: Race Conditions
+
 **Mitigation:** The check and sync are not atomic, but this is acceptable - worst case, a sync happens when it shouldn't have. No data corruption risk.
 
 ---
@@ -94,18 +100,21 @@ Prevent auto-sync from creating unintended workspace registrations while maintai
 ## Alternative Approaches
 
 ### Alternative 1: Create New `is-indexed` Subcommand
+
 Create a dedicated `forge workspace is-indexed` command instead of extending `info`.
 
 **Pros:** Clearer intent, dedicated purpose  
 **Cons:** More API surface, duplicates existing functionality
 
 ### Alternative 2: Display-Only Fix
+
 Just improve the workspace list display to show `[Current via ancestor]` without changing auto-sync behavior.
 
 **Pros:** Simpler implementation, no behavior changes  
 **Cons:** Doesn't solve the root problem of unintended workspace registrations
 
 ### Alternative 3: Auto-Sync with Depth Limit
+
 Only auto-sync directories within N levels of an existing workspace.
 
 **Pros:** Prevents deep directory pollution  

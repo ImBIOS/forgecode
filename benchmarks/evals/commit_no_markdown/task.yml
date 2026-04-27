@@ -23,7 +23,7 @@ run:
     EOF
   - cd test_repo && git add example.js
   - cd test_repo && forgee --provider {{provider}} --model {{model}} commit --preview
-  
+
 parallelism: 2
 timeout: 120
 
@@ -31,15 +31,15 @@ validations:
   - name: "Should generate conventional commit message"
     type: regex
     regex: "(feat|fix|refactor|chore|docs|style|test|perf)(\\(|:)"
-    
+
   - name: "Should NOT contain markdown code block with json"
     type: shell
     command: "! grep -qE '```json'"
-    
+
   - name: "Should NOT contain plain code block markers"
     type: shell
     command: "! grep -qE '^```$'"
-    
+
   - name: "Should NOT contain backticks wrapping commit message"
     type: shell
     command: "! grep -qE '`(feat|fix|refactor|chore|docs|style|test|perf)\\('"

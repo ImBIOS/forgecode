@@ -2,7 +2,9 @@
 name: create-agent
 description: Create new agents for the code-forge application. Agents are stored as .md files in the <cwd>/.forge/agents directory with YAML frontmatter (id, title, description, reasoning, tools, user_prompt) and markdown body containing agent instructions. Use when users need to add new agents, modify existing agents, or understand the agent file structure.
 ---
+
 {{{{raw}}}}
+
 # Create Agents
 
 Create and manage agents for the code-forge application. Agents are specialized AI assistants with specific capabilities, tools, and behaviors.
@@ -67,6 +69,7 @@ user_prompt: |-
 You are Forge, an expert software engineering assistant...
 
 ## Core Principles:
+
 ...
 ```
 
@@ -141,6 +144,7 @@ This agent cannot perform certain tasks. When asked to do so, politely explain t
 ### Step 1: Determine Agent Purpose
 
 Identify what the agent should accomplish:
+
 - What is the agent's primary function?
 - What tasks will it perform?
 - What tools does it need?
@@ -150,6 +154,7 @@ Identify what the agent should accomplish:
 ### Step 2: Choose Agent ID and Title
 
 Use descriptive IDs and titles:
+
 - ID: Use lowercase with hyphens for multi-word (e.g., `code-reviewer`, `test-automation`)
 - Title: Use clear, descriptive text (e.g., "Review code quality", "Automate testing")
 
@@ -181,6 +186,7 @@ user_prompt: |-
 #### Agent Body
 
 The body should include:
+
 - Agent introduction and identity
 - Core principles (typically 5-7 principles)
 - Capabilities organized by category
@@ -193,18 +199,21 @@ The body should include:
 ### Required Fields
 
 #### `id`
+
 - Unique identifier for the agent
 - Use lowercase letters and hyphens
 - Should be descriptive and concise
 - Example: `forge`, `sage`, `muse`
 
 #### `title`
+
 - Display name for the agent
 - Clear and descriptive
 - Should indicate the agent's primary function
 - Example: "Perform technical development tasks"
 
 #### `description`
+
 - Detailed description of the agent's purpose
 - Include what the agent does
 - Include when to use the agent
@@ -213,6 +222,7 @@ The body should include:
 - Should be comprehensive (typically 2-4 sentences)
 
 #### `reasoning`
+
 - Configuration for agent reasoning capabilities
 - Currently only supports `enabled: true/false`
 - Example:
@@ -222,12 +232,14 @@ The body should include:
   ```
 
 #### `tools`
+
 - List of tools the agent can use
 - Each tool on its own line with `- ` prefix
 - Can include wildcards (e.g., `mcp_*`)
 - Common tools: `sem_search`, `sage`, `read`, `write`, `shell`, etc.
 
 #### `user_prompt`
+
 - Template for user context injection
 - Must include event handling
 - Must include system date
@@ -372,7 +384,7 @@ You are Sage, an expert codebase research and exploration assistant...
 
 Agents that create strategic plans without implementation:
 
-```markdown
+````markdown
 ---
 id: "muse"
 title: "Generate detailed implementation plans"
@@ -444,11 +456,13 @@ The action plan must include these sections:
 1. **[Risk Description]**
    Mitigation: [Strategy]
 ```
+````
 
 ## Boundaries:
 
 **Strictly Advisory**: You cannot perform implementation tasks. If asked, offer to switch to an implementation agent like Forge.
-```
+
+````
 
 ## Agent Templates
 
@@ -513,7 +527,7 @@ You are Implementation Agent, an expert software engineering assistant...
 - **Read**: When examining file contents
 - **Write/Patch**: For making code changes
 - **Shell**: For running commands or build tools
-```
+````
 
 ### Research Agent Template
 
@@ -573,18 +587,23 @@ You are Research Agent, an expert codebase research and exploration assistant...
 ## Response Structure:
 
 ### Research Summary:
+
 Brief overview of what was investigated
 
 ### Key Findings:
+
 Most important discoveries with file references
 
 ### Technical Details:
+
 Specific implementation details and patterns
 
 ### Insights and Context:
+
 Explanations of why things were designed this way
 
 ### Follow-up Suggestions:
+
 Areas for deeper investigation
 
 ## Limitations:
@@ -594,7 +613,7 @@ Areas for deeper investigation
 
 ### Planning Agent Template
 
-```markdown
+````markdown
 ---
 id: "planning-agent"
 title: "Generate strategic plans"
@@ -688,11 +707,13 @@ You are Planning Agent, an expert strategic planning and analysis assistant...
 1. [Alternative 1]: [Description and trade-offs]
 2. [Alternative 2]: [Description and trade-offs]
 ```
+````
 
 ## Boundaries:
 
 **Strictly Advisory**: You cannot perform implementation tasks. If asked, explicitly state this and offer to switch to an implementation agent.
-```
+
+````
 
 ## Best Practices
 
@@ -755,11 +776,12 @@ When an agent cannot perform a task, suggest an alternative:
 ## Agent Transition:
 
 If at any point the user requests [task], explicitly state that you cannot perform such tasks and offer to switch to a different agent (like [Agent Name]) that is authorized to perform those tasks.
-```
+````
 
 ### Response Structure
 
 Organize agent responses with clear sections:
+
 - Summary or overview
 - Detailed findings or analysis
 - Technical details
@@ -771,12 +793,14 @@ Organize agent responses with clear sections:
 Use this checklist to verify your agent is complete and correct:
 
 ### File Structure
+
 - [ ] File is in the `<cwd>/.forge/agents` directory (CRITICAL)
 - [ ] Filename matches agent ID (e.g., `forge.md` for `id: "forge"`)
 - [ ] File has `.md` extension
 - [ ] YAML frontmatter uses `---` delimiters
 
 ### Frontmatter
+
 - [ ] `id` field is present and unique
 - [ ] `id` uses lowercase letters and hyphens
 - [ ] `title` field is present and descriptive
@@ -786,6 +810,7 @@ Use this checklist to verify your agent is complete and correct:
 - [ ] `user_prompt` field is present with standard format
 
 ### Agent Body
+
 - [ ] Agent introduction is clear and specific
 - [ ] Core principles are defined (5-7 principles)
 - [ ] Capabilities are organized by category
@@ -794,12 +819,14 @@ Use this checklist to verify your agent is complete and correct:
 - [ ] Limitations and boundaries are clearly stated
 
 ### Tools
+
 - [ ] Tools are appropriate for agent purpose
 - [ ] No unnecessary tools are included
 - [ ] Wildcards are used appropriately
 - [ ] Tools are ordered logically
 
 ### Content Quality
+
 - [ ] Agent purpose is clear and specific
 - [ ] Instructions are clear and unambiguous
 - [ ] No redundant or duplicate information
@@ -808,6 +835,7 @@ Use this checklist to verify your agent is complete and correct:
 - [ ] Limitations are clearly explained
 
 ### Testing
+
 - [ ] Agent can be loaded successfully
 - [ ] Frontmatter is valid YAML
 - [ ] All required fields are present
@@ -822,9 +850,11 @@ Bad: **Wrong delimiter**:
 
 ```markdown
 ---
+
 id: "my-agent"
 title: "My Agent"
 ```
+
 (Missing closing `---`)
 
 Good: **Correct**:
@@ -859,6 +889,7 @@ tools:
   - read
 ---
 ```
+
 (Missing `user_prompt`)
 
 Good: **Correct**:
@@ -885,6 +916,7 @@ Bad: **CamelCase ID**:
 
 ```markdown
 ---
+
 id: "MyAgent"
 ```
 
@@ -892,6 +924,7 @@ Good: **Correct**:
 
 ```markdown
 ---
+
 id: "my-agent"
 ```
 
@@ -899,6 +932,7 @@ Bad: **Underscore in ID**:
 
 ```markdown
 ---
+
 id: "my_agent"
 ```
 
@@ -906,6 +940,7 @@ Good: **Correct**:
 
 ```markdown
 ---
+
 id: "my-agent"
 ```
 
@@ -915,6 +950,7 @@ Bad: **Too vague**:
 
 ```markdown
 ---
+
 description: "This agent does things"
 ```
 
@@ -922,6 +958,7 @@ Good: **Correct**:
 
 ```markdown
 ---
+
 description: "Hands-on implementation agent that executes software development tasks through direct code modifications, file operations, and system commands. Specializes in building features, fixing bugs, refactoring code, and making concrete changes to codebases."
 ```
 
@@ -931,50 +968,56 @@ Bad: **Too many tools**:
 
 ```markdown
 tools:
-  - sem_search
-  - search
-  - read
-  - write
-  - patch
-  - undo
-  - remove
-  - shell
-  - fetch
-  - skill
-  - sage
-  - mcp_*
+
+- sem_search
+- search
+- read
+- write
+- patch
+- undo
+- remove
+- shell
+- fetch
+- skill
+- sage
+- mcp\_\*
 ```
+
 (Research agent shouldn't have write/patch/undo/remove)
 
 Good: **Correct**:
 
 ```markdown
 tools:
-  - sem_search
-  - search
-  - read
-  - fetch
+
+- sem_search
+- search
+- read
+- fetch
 ```
 
 Bad: **Missing essential tools**:
 
 ```markdown
 tools:
-  - read
-  - write
+
+- read
+- write
 ```
+
 (Implementation agent needs search capabilities)
 
 Good: **Correct**:
 
 ```markdown
 tools:
-  - sem_search
-  - search
-  - read
-  - write
-  - patch
-  - shell
+
+- sem_search
+- search
+- read
+- write
+- patch
+- shell
 ```
 
 ### Content Mistakes
@@ -995,6 +1038,7 @@ Bad: **Missing limitations**:
 
 ```markdown
 ## Capabilities:
+
 - Can do everything
 ```
 
@@ -1002,9 +1046,11 @@ Good: **Correct**:
 
 ```markdown
 ## Capabilities:
+
 - Can perform implementation tasks
 
 ## Limitations:
+
 - Cannot perform research tasks (use Sage instead)
 - Cannot create strategic plans (use Muse instead)
 ```
@@ -1012,11 +1058,13 @@ Good: **Correct**:
 ## Quick Reference
 
 ### File Location
+
 - **Directory**: `<cwd>/.forge/agents` (where `<cwd>` is current working directory)
 - **Format**: `{agent-id}.md`
 - **CRITICAL**: Agents MUST be in this exact location to be discovered by forge
 
 ### Required Frontmatter Fields
+
 - `id` - Unique agent identifier (lowercase with hyphens)
 - `title` - Display name for the agent
 - `description` - Detailed description of agent purpose
@@ -1025,6 +1073,7 @@ Good: **Correct**:
 - `user_prompt` - Template for user context
 
 ### Common Tools
+
 - `sem_search` - Semantic code search
 - `search` / `fs_search` - Regex search
 - `read` - Read files
@@ -1035,11 +1084,13 @@ Good: **Correct**:
 - `mcp_*` - All MCP tools
 
 ### Agent Types
+
 - **Implementation** - Makes code changes (read, write, patch, shell)
 - **Research** - Analyzes codebases (read-only tools)
 - **Planning** - Creates strategic plans (read, write for documentation)
 
 ### Content Guidelines
+
 - Start with clear agent introduction
 - Include 5-7 core principles
 - Organize capabilities by category
@@ -1049,6 +1100,7 @@ Good: **Correct**:
 - Use bullet points for lists of items
 
 ### File Location
+
 - Path: Agents directory
 - Format: `{agent-id}.md`
 
@@ -1057,6 +1109,7 @@ Good: **Correct**:
 After creating an agent, test it by:
 
 1. **Syntax Check**: Verify YAML is valid
+
    ```bash
    # If you have yamllint installed
    yamllint path/to/your-agent.md
@@ -1087,6 +1140,7 @@ After creating an agent, test it by:
 ## Verification
 
 After creating an agent:
+
 1. **Verify the file location**: Ensure the file is in `<cwd>/.forge/agents` directory (CRITICAL - agents anywhere else will not be found)
 2. Check YAML frontmatter is valid (use `---` delimiters)
 3. Ensure the agent ID matches the filename (without .md)
@@ -1098,8 +1152,9 @@ After creating an agent:
 ## Getting Help
 
 If you're unsure about something:
+
 - Review the templates in this skill
 - Follow the validation checklist
 - Compare with similar existing agents
 - Test your agent before finalizing
-{{{{/raw}}}}
+  {{{{/raw}}}}

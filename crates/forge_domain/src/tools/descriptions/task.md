@@ -1,23 +1,25 @@
-Launch a new agent to handle complex, multi-step tasks autonomously. 
+Launch a new agent to handle complex, multi-step tasks autonomously.
 
 The {{tool_names.task}} tool launches specialized agents (subprocesses) that autonomously handle complex tasks. Each agent type has specific capabilities and tools available to it.
 
 Available agent types and the tools they have access to:
 {{#each agents}}
+
 - **{{id}}**{{#if description}}: {{description}}{{/if}}{{#if tools}}
   - Tools: {{#each tools}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}{{/if}}
-{{/each}}
+    {{/each}}
 
 When using the {{tool_names.task}} tool, you must specify a agent_id parameter to select which agent type to use.
 
 When NOT to use the {{tool_names.task}} tool:
+
 - If you want to read a specific file path, use the {{tool_names.read}} or {{tool_names.fs_search}} tool instead of the {{tool_names.task}} tool, to find the match more quickly
 - If you are searching for a specific class definition like "class Foo", use the {{tool_names.fs_search}} tool instead, to find the match more quickly
 - If you are searching for code within a specific file or set of 2-3 files, use the {{tool_names.read}} tool instead of the {{tool_names.task}} tool, to find the match more quickly
 - Other tasks that are not related to the agent descriptions above
 
-
 Usage notes:
+
 - Always include a short description (3-5 words) summarizing what the agent will do
 - Launch multiple agents concurrently whenever possible, to maximize performance; to do that, use a single message with multiple tool uses
 - When the agent is done, it will return a single message back to you. The result returned by the agent is not visible to the user. To show the user the result, you should send a text message back to the user with a concise summary of the result.

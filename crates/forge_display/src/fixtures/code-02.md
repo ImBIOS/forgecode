@@ -21,7 +21,7 @@ def greet(name):
 
 ```javascript
 function add(a, b) {
-    return a + b;
+  return a + b;
 }
 ```
 

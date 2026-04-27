@@ -4,9 +4,6 @@
 
 Modify the system context rendering mechanism to:
 
-
-
-
 1. Re-render the system context on every conversation turn
 2. Pass variables to the system context renderer (similar to event rendering)
 
@@ -89,7 +86,7 @@ Modify the `SystemContext` struct in `crates/forge_domain/src/system_context.rs`
 pub struct SystemContext {
     // Current date and time at the time of context creation
     pub current_time: String,
-    
+
     // Environment information to be included in the system context
     #[serde(skip_serializing_if = "Option::is_none")]
     pub env: Option<Environment>,
@@ -112,7 +109,7 @@ pub struct SystemContext {
 
     #[serde(skip_serializing_if = "String::is_empty")]
     pub custom_rules: String,
-    
+
     // Variables to pass to the system context
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     pub variables: HashMap<String, Value>,
@@ -209,7 +206,7 @@ async fn init_agent(&self, agent_id: &AgentId, event: &Event) -> anyhow::Result<
     loop {
         // Get the latest conversation variables
         let variables = self.conversation.read().await.variables.clone();
-        
+
         // Re-render system prompt if present
         if let Some(system_prompt) = &agent.system_prompt {
             let system_message = self
@@ -217,10 +214,10 @@ async fn init_agent(&self, agent_id: &AgentId, event: &Event) -> anyhow::Result<
                 .template_service()
                 .render_system(agent, system_prompt, &variables)
                 .await?;
-                
+
             context = context.set_first_system_message(system_message);
         }
-        
+
         // Set context for the current loop iteration
         self.set_context(&agent.id, context.clone()).await?;
         let response = self
@@ -263,7 +260,6 @@ async fn init_agent(&self, agent_id: &AgentId, event: &Event) -> anyhow::Result<
 }
 ```
 
-
 ### 5. Update Tests
 
 Add tests for the updated `render_system` method with variables:
@@ -275,17 +271,17 @@ async fn test_render_system_with_variables() {
     // Create a test agent
     let agent = Agent::new("test-agent")
         .system_prompt(Template::from_string("{{current_time}} - {{variables.test_var}}"));
-    
+
     // Create test variables
     let mut variables = HashMap::new();
     variables.insert("test_var".to_string(), json!("test_value"));
-    
+
     // Render the system prompt with variables
     let result = template_service
         .render_system(&agent, agent.system_prompt.as_ref().unwrap(), &variables)
         .await
         .unwrap();
-    
+
     // Verify the result contains both the current time and the variable
     assert!(result.contains("test_value"));
 }
@@ -295,8 +291,6 @@ async fn test_render_system_with_variables() {
 
 The implementation will be considered successful if:
 
-
-
 1. The system context is re-rendered on each conversation turn, ensuring up-to-date information
 2. Variables from the conversation state are correctly passed to the system context renderer
 3. System context templates can access and display these variables
@@ -305,11 +299,7 @@ The implementation will be considered successful if:
 
 ## Technical Design Notes
 
-
-
 1. **Clean Approach**: The implementation takes a clean approach without backward compatibility concerns, as specified.
 2. **Performance**: Re-rendering the system context on each turn should not cause performance issues.
 3. **Consistency**: The approach aligns with how event rendering already handles variables.
 4. **Error Handling**: Proper error handling is maintained throughout the implementation.
-
-

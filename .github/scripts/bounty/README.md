@@ -35,12 +35,12 @@ maintainer removes last  bounty: $N  label
 
 ## Labels
 
-| Label                            | Applied to | Set by                                                      |
-| -------------------------------- | ---------- | ----------------------------------------------------------- |
-| `bounty: $100` … `bounty: $5500` | Issue      | Maintainer (manually)                                       |
-| `bounty`                         | Issue      | `parse-sync-generic-bounty.ts` on value label add/remove    |
-| `bounty: claimed`                | Issue      | `parse-sync-claimed.ts` on assignment                       |
-| `bounty: rewarded`               | Issue + PR | `parse-mark-rewarded.ts` on merge                           |
+| Label                            | Applied to | Set by                                                   |
+| -------------------------------- | ---------- | -------------------------------------------------------- |
+| `bounty: $100` … `bounty: $5500` | Issue      | Maintainer (manually)                                    |
+| `bounty`                         | Issue      | `parse-sync-generic-bounty.ts` on value label add/remove |
+| `bounty: claimed`                | Issue      | `parse-sync-claimed.ts` on assignment                    |
+| `bounty: rewarded`               | Issue + PR | `parse-mark-rewarded.ts` on merge                        |
 
 Bounty values follow the Fibonacci sequence: **$100, $200, $300, $500, $800, $1300, $2100, $3400, $5500**.
 
@@ -59,6 +59,7 @@ parse  →  ParsedIntent (in memory)  →  plan  →  BatchPlan (in memory)  →
 **Stage 3 — execute** (`execute.ts`): Receives the `BatchPlan` and applies all mutations. Label additions per target are sent as a single batched `POST /labels` call. Each removal is a separate `DELETE` (GitHub has no bulk-remove endpoint). Comments are posted last.
 
 This design means:
+
 - The parse stage is trivially unit-testable (pure function, no mocks needed).
 - The plan stage is testable with a minimal mock that only needs `getLabels`.
 - The execute stage is testable with a mock that tracks calls — no HTTP.
@@ -127,6 +128,7 @@ Receives a `BatchPlan` from the plan stage. For each mutation: one batched `POST
 ## Shared Module
 
 `github-api.ts` defines:
+
 - Event payload types (`PullRequestEvent`, `IssuesEvent`)
 - Pipeline types (`ParsedIntent`, `BatchPlan`, `TargetMutation`)
 - The `GitHubApi` interface (injectable for testing)

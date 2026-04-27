@@ -65,11 +65,11 @@ sources:
       - task: "What does the main.rs file contain?"
       - task: "Display the contents of the config file at src/config.rs."
       - task: "Check what's in the .gitignore file."
-      
+
       # Multiple file reading - should use multiple Read tool calls
       - task: "Compare the contents of Cargo.toml and package.json files."
       - task: "Read both src/main.rs and src/lib.rs to understand the structure."
-      
+
       # File inspection tasks
       - task: "Show me the first 50 lines of README.md to understand the project."
       - task: "I need to see the error messages in src/error.rs file."

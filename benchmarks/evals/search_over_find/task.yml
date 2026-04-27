@@ -52,7 +52,7 @@ sources:
       - task: "Find all Rust source files in the crates/service directory."
       - task: "List all Rust files in crates/app to understand the structure."
       - task: "Show me all .rs files in the project so I can plan refactoring."
-      
+
       # Structure understanding - should use fs_search or sem_search
       - task: "Find all source files under crates/service and crates/app for analysis."
       - task: "List all Rust source files in the workspace for documentation purposes."

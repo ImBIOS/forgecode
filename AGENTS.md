@@ -18,6 +18,7 @@ This project uses a feature-based documentation system in `.relay/`:
 ```
 
 **Mandatory workflow for AI agents:**
+
 - **Always check `.relay/features/` for existing specs before implementing anything.** If a spec already exists for the work, read it first and follow its guidance.
 - **Always run QA after implementing a feature.** Every spec MUST have a corresponding `qa.md` — if one does not exist, create it from the template.
 - **If no spec exists for the work, create one first** using the template in `.relay/README.md` before writing any code.

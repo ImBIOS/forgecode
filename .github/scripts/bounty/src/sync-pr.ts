@@ -34,8 +34,8 @@ export async function planPr({ prNumber, api }: PlanPrInput): Promise<Patch> {
       api.getIssue(n).catch((err) => {
         console.warn(`Could not fetch linked issue #${n}: ${String(err)}, skipping.`);
         return null;
-      })
-    )
+      }),
+    ),
   ).then((results) => results.filter((i): i is NonNullable<typeof i> => i !== null));
 
   return computePrPatch({ pr, currentLabels, linkedIssues });
@@ -57,7 +57,10 @@ if (process.argv[1] === url.fileURLToPath(import.meta.url)) {
   const argv = await yargs(hideBin(process.argv))
     .option("pr", { type: "number", demandOption: true, description: "PR number" })
     .option("repo", { type: "string", demandOption: true, description: "owner/repo" })
-    .option("token", { type: "string", description: "GitHub token (falls back to GITHUB_TOKEN env var or `gh auth token`)" })
+    .option("token", {
+      type: "string",
+      description: "GitHub token (falls back to GITHUB_TOKEN env var or `gh auth token`)",
+    })
     .option("execute", {
       type: "boolean",
       default: false,

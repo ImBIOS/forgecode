@@ -15,7 +15,7 @@ indexmap.workspace = true
 nom.workspace = true
 schemars.workspace = true
 serde.workspace = true
-eserde = {version= "0.1.7", features=["json"]}
+eserde = { version = "0.1.7", features = ["json"] }
 serde_json = { workspace = true, features = ["raw_value"] }
 strum.workspace = true
 strum_macros.workspace = true

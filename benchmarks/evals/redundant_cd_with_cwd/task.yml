@@ -4,7 +4,7 @@ run:
   - FORGE_DEBUG_REQUESTS='{{dir}}/context.json' forgee --provider open_router --model {{model}} -p '{{task}}'
 parallelism: 5
 timeout: 120
-early_exit: false  # We want to see all cases, not just the first success
+early_exit: false # We want to see all cases, not just the first success
 
 validations:
   # Check if any shell tool call contains "cd" command when cwd is also provided

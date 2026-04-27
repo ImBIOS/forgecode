@@ -9,11 +9,13 @@
 ## Vocabulary
 
 **Prefer:**
+
 - "ForgeCode", "agent", "task", "context", "codebase", "workflow"
 - Short, active-voice sentences.
 - Concrete nouns over abstract ones ("file watcher" not "intelligent monitoring capability").
 
 **Avoid:**
+
 - "Forge" alone as the product name. Always use "ForgeCode".
 - Em dashes (--) anywhere in the post. Use commas, colons, or periods instead.
 - "excited to announce", "thrilled", "proud to share"
@@ -47,21 +49,25 @@ Always end with `#ForgeCode`. Add 1-2 from the list below that best fit:
 ## Example Posts
 
 **Custom agents:**
+
 > ForgeCode lets you define custom agents for specific tasks: code review, refactoring, docs. Each agent gets its own system prompt and tool set. Less context noise, better results.
 >
 > #ForgeCode #Agents #DevTools
 
 **Shell integration:**
+
 > ForgeCode's shell plugin tracks your terminal history and feeds relevant context to the agent. No more copy-pasting commands to explain what went wrong.
 >
 > #ForgeCode #CLI #DevTools
 
 **Multi-file edits:**
+
 > ForgeCode can plan and apply changes across multiple files in a single task. Rename a type, update all call sites, fix the tests, done in one pass.
 >
 > #ForgeCode #AICode #DevTools
 
 **Context compaction:**
+
 > Long tasks no longer blow up the context window. ForgeCode automatically compacts older turns while keeping the essential state. Tasks that used to fail mid-way now run to completion.
 >
 > #ForgeCode #ContextWindow #AICode

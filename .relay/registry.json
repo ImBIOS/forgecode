@@ -9,12 +9,7 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": [
-          "id",
-          "slug",
-          "title",
-          "status"
-        ],
+        "required": ["id", "slug", "title", "status"],
         "properties": {
           "id": {
             "type": "string",
@@ -32,13 +27,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "proposed",
-              "in-progress",
-              "implemented",
-              "deprecated",
-              "removed"
-            ],
+            "enum": ["proposed", "in-progress", "implemented", "deprecated", "removed"],
             "description": "Current feature status"
           },
           "hasPatch": {
@@ -63,9 +52,7 @@
       }
     }
   },
-  "required": [
-    "features"
-  ],
+  "required": ["features"],
   "features": [
     {
       "id": "000",

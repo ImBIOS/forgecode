@@ -25,18 +25,18 @@ validations:
         echo "No expected files specified, skipping check"
         exit 0
       fi
-      
+
       # Extract file paths from sem_search results (XML format: path="...")
       results=$(cat '{{dir}}/context.json' | jq -r '
         .messages[]? | 
         select(.role == "tool" and .name == "sem_search") | 
         .content' 2>/dev/null | grep -o 'path="[^"]*"' | sed 's/path="//;s/"//' | sort -u)
-      
+
       if [ -z "$results" ]; then
         echo "No sem_search results found in context"
         exit 0
       fi
-      
+
       # Check each expected file
       IFS=',' read -ra EXPECTED <<< "{{expected_files}}"
       missing_files=()
@@ -46,7 +46,7 @@ validations:
           missing_files+=("$expected")
         fi
       done
-      
+
       if [ ${#missing_files[@]} -gt 0 ]; then
         echo "Missing expected files in sem_search results:"
         printf '  - %s\n' "${missing_files[@]}"
@@ -55,7 +55,7 @@ validations:
         echo "$results" | sed 's/^/  - /'
         exit 1
       fi
-      
+
       echo "All expected files found in results"
       exit 0
 
@@ -67,7 +67,7 @@ validations:
         echo "Skipping LLM judge: sem_search tool was not used"
         exit 0
       fi
-      
+
       tsx benchmarks/evals/semantic_search_quality/llm_judge.ts \
         --context '{{dir}}/context.json' \
         --intent '{{intent}}' \
@@ -109,7 +109,7 @@ sources:
         expected_file_types: "rust"
         should_avoid: "test,markdown"
         expected_files: "crates/forge_app/src/tool_executor.rs,crates/forge_domain/src/node.rs,crates/forge_services/src/context_engine.rs,crates/forge_repo/src/context_engine.rs,crates/forge_repo/proto/forge.proto,crates/forge_app/src/search_dedup.rs,crates/forge_app/src/operation.rs"
-        
+
       - task: "How does file patching handle validation and atomic writes?"
         intent: "flow_understanding"
         expected_file_types: "rust"
@@ -133,7 +133,6 @@ sources:
         expected_file_types: "rust"
         should_avoid: "markdown,documentation"
         expected_files: "crates/forge_app/src/operation.rs,crates/forge_snaps/src/service.rs,crates/forge_domain/src/session_metrics.rs"
-
 
       # Config/Schema queries - configuration discovery
       - task: "Where is all the config schema validation code?"

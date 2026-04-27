@@ -6,6 +6,6 @@ early_exit: true
 validations:
   - name: "Uses create-skill tool"
     type: shell
-    command: "jq -e '[.messages[]?.tool_calls[]? | select(.function.name == \"skill\") | .function.arguments | fromjson | .name == \"create-skill\"] | any' {{dir}}/context.json"
+    command: 'jq -e ''[.messages[]?.tool_calls[]? | select(.function.name == "skill") | .function.arguments | fromjson | .name == "create-skill"] | any'' {{dir}}/context.json'
 sources:
   - csv: create_skill_tasks.csv

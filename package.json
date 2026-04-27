@@ -1,8 +1,18 @@
 {
   "name": "forge-code-evals",
-  "description": "",
   "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "license": "ISC",
   "author": "Tushar Mathur <tusharmath@gmail.com>",
+  "type": "module",
+  "scripts": {
+    "bounty:sync-all-issues": "tsx .github/scripts/bounty/src/sync-all-issues.ts",
+    "bounty:sync-issue": "tsx .github/scripts/bounty/src/sync-issue.ts",
+    "bounty:sync-pr": "tsx .github/scripts/bounty/src/sync-pr.ts",
+    "eval": "tsx benchmarks/cli.ts",
+    "test:bounty": "tsx --test .github/scripts/bounty/tests/*.test.ts"
+  },
   "dependencies": {
     "@ai-sdk/google-vertex": "^4.0.47",
     "ai": "^6.0.77",
@@ -18,22 +28,12 @@
     "typescript": "^6.0.0",
     "yaml": "^2.8.3",
     "yargs": "^18.0.0",
-    "zod": "^4.0.0"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/handlebars": "^4.0.40",
     "@types/node": "^24.10.1",
     "@types/tmp": "^0.2.6",
     "@types/yargs": "^17.0.35"
-  },
-  "license": "ISC",
-  "private": true,
-  "scripts": {
-    "bounty:sync-all-issues": "tsx .github/scripts/bounty/src/sync-all-issues.ts",
-    "bounty:sync-issue": "tsx .github/scripts/bounty/src/sync-issue.ts",
-    "bounty:sync-pr": "tsx .github/scripts/bounty/src/sync-pr.ts",
-    "eval": "tsx benchmarks/cli.ts",
-    "test:bounty": "tsx --test .github/scripts/bounty/tests/*.test.ts"
-  },
-  "type": "module"
+  }
 }

@@ -85,6 +85,7 @@ The plugin automatically manages conversation IDs to maintain context across rel
 Shell commands should follow the **Object-Action** format.
 
 Examples:
+
 - `:provider-login`
 - `:sync-status`
 
@@ -158,6 +159,7 @@ The plugin remembers your previous conversation, allowing you to quickly toggle 
 If there's no previous conversation tracked (e.g., first time using the plugin), `:c -` will show the conversation list popup, allowing you to select a conversation.
 
 This is useful when:
+
 - You need to temporarily check another conversation and come back
 - You're comparing or referencing information between two conversations
 - You want to quickly switch context between related tasks
@@ -172,6 +174,7 @@ Create a copy of an existing conversation with interactive selection:
 ```
 
 This will:
+
 - Display an interactive list of all conversations with preview
 - Allow you to select a conversation to clone
 - Create a new conversation with the same content
@@ -185,6 +188,7 @@ You can also clone a specific conversation by providing its ID:
 ```
 
 This is useful when you want to:
+
 - Create a backup before making significant changes
 - Start a new conversation branch from an existing context
 - Experiment with different approaches while preserving the original
@@ -192,6 +196,7 @@ This is useful when you want to:
 #### Session Status
 
 The plugin automatically displays session information including:
+
 - Conversation ID when starting new sessions
 - Active agent information
 - New session confirmations with timestamps
@@ -246,6 +251,7 @@ Run comprehensive environment diagnostics to check your Forge setup:
 ```
 
 This will check:
+
 - ZSH version and terminal information
 - Forge installation and version
 - Plugin and theme loading status
@@ -266,6 +272,7 @@ The plugin creates a `.forge` directory in your current working directory (simil
 ### Command History
 
 All transformed commands are properly saved to ZSH history, allowing you to:
+
 - Navigate command history with arrow keys
 - Search previous forge commands with `Ctrl+R`
 - Reuse complex commands with file tags
@@ -303,7 +310,6 @@ All transformed commands are properly saved to ZSH history, allowing you to:
 :new
 : New conversation starts here
 ```
-
 
 ### Codebase Indexing
 

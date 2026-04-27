@@ -326,7 +326,7 @@ description: Cleans up temporary files and artifacts
 - Remove build artifacts
   <shell>rm -rf target/debug</shell>
 - Remove temporary files
-  <shell>find . -name "*.tmp" -delete</shell>
+  <shell>find . -name "\*.tmp" -delete</shell>
 - Clean up dependency caches if needed
 - Verify the project still builds
 ```
@@ -417,6 +417,7 @@ Bad: **Wrong delimiter**:
 
 ```markdown
 ---
+
 name: my-command
 description: My command
 ```

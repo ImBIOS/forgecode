@@ -25,7 +25,7 @@ Add functionality to identify only the first sequence of assistant messages that
 fn identify_first_compressible_sequence(&self, context: &Context) -> Option<(usize, usize)> {
     let messages = context.messages();
     let mut current_sequence_start: Option<usize> = None;
-    
+
     for (i, message) in messages.iter().enumerate() {
         if message.is_assistant() {
             // Start a new sequence or continue current one
@@ -43,7 +43,7 @@ fn identify_first_compressible_sequence(&self, context: &Context) -> Option<(usi
             }
         }
     }
-    
+
     // Check for a sequence at the end
     if let Some(start) = current_sequence_start {
         let end = messages.len() - 1;
@@ -51,7 +51,7 @@ fn identify_first_compressible_sequence(&self, context: &Context) -> Option<(usi
             return Some((start, end));
         }
     }
-    
+
     None // No compressible sequence found
 }
 ```
@@ -65,12 +65,12 @@ pub async fn compact_context(&self, agent: &Agent, context: Context) -> Result<C
     if !self.should_perform_compaction(agent, &context) {
         return Ok(context);
     }
-    
+
     debug!(
         agent_id = %agent.id,
         "Context compaction triggered"
     );
-    
+
     // Identify the first compressible sequence
     if let Some(sequence) = self.identify_first_compressible_sequence(&context) {
         debug!(
@@ -79,7 +79,7 @@ pub async fn compact_context(&self, agent: &Agent, context: Context) -> Result<C
             sequence_end = sequence.1,
             "Compressing assistant message sequence"
         );
-        
+
         // Compress just this sequence
         self.compress_single_sequence(agent, context, sequence).await
     } else {
@@ -95,47 +95,47 @@ Create a method to handle the compression of a single identified sequence:
 
 ```rust
 async fn compress_single_sequence(
-    &self, 
-    agent: &Agent, 
-    original_context: Context, 
+    &self,
+    agent: &Agent,
+    original_context: Context,
     sequence: (usize, usize)
 ) -> Result<Context> {
     let messages = original_context.messages();
     let (start, end) = sequence;
-    
+
     // Extract the sequence to summarize
     let sequence_messages = &messages[start..=end];
-    
+
     // Generate summary for this sequence
     let summary = self.generate_summary_for_sequence(agent, sequence_messages).await?;
-    
+
     // Build a new context with the sequence replaced by the summary
     let mut compacted_messages = Vec::new();
-    
+
     // Add messages before the sequence
     compacted_messages.extend(messages[0..start].to_vec());
-    
+
     // Add the summary as a single assistant message
     compacted_messages.push(ContextMessage::assistant(summary, None));
-    
+
     // Add messages after the sequence
     if end + 1 < messages.len() {
         compacted_messages.extend(messages[end+1..].to_vec());
     }
-    
+
     // Build the new context
     let mut compacted_context = Context::default();
-    
+
     // Add system message if present in original context
     if let Some(system_msg) = original_context.system_message() {
         compacted_context = compacted_context.set_first_system_message(system_msg.clone());
     }
-    
+
     // Add all the processed messages
     for msg in compacted_messages {
         compacted_context = compacted_context.add_message(msg);
     }
-    
+
     Ok(compacted_context)
 }
 ```
@@ -146,8 +146,8 @@ Create a method to generate summaries for a specific sequence:
 
 ```rust
 async fn generate_summary_for_sequence(
-    &self, 
-    agent: &Agent, 
+    &self,
+    agent: &Agent,
     messages: &[ContextMessage]
 ) -> Result<String> {
     let compact = agent.compact.as_ref().unwrap();
@@ -157,7 +157,7 @@ async fn generate_summary_for_sequence(
     for msg in messages {
         sequence_context = sequence_context.add_message(msg.clone());
     }
-    
+
     // Render the summarization prompt
     let prompt = self
         .services
@@ -189,7 +189,7 @@ The original `generate_summary` and `build_compacted_context` methods will be re
 
 ## Implementation Considerations
 
-1. **Processing Only One Sequence**: This approach only compresses one sequence at a time, which means that if there are multiple compressible sequences, only the first one will be compressed in a single call to `compact_context`. 
+1. **Processing Only One Sequence**: This approach only compresses one sequence at a time, which means that if there are multiple compressible sequences, only the first one will be compressed in a single call to `compact_context`.
 
 2. **Repeated Compaction**: If desired, the caller can repeatedly call `compact_context` to compress additional sequences over multiple iterations.
 

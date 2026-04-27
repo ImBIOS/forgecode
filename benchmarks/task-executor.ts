@@ -61,18 +61,10 @@ export async function executeTask(
       const checkValidations = async () => {
         if (exitedEarly || timedOut) return;
 
-        if (
-          task.early_exit &&
-          task.validations &&
-          task.validations.length > 0
-        ) {
+        if (task.early_exit && task.validations && task.validations.length > 0) {
           const currentOutput = stdout + stderr;
           if (currentOutput) {
-            const results = await runValidations(
-              currentOutput,
-              task.validations,
-              context,
-            );
+            const results = await runValidations(currentOutput, task.validations, context);
             if (allValidationsPassed(results)) {
               exitedEarly = true;
               if (timeoutId) clearTimeout(timeoutId);
@@ -169,8 +161,7 @@ export async function executeTask(
     };
   } catch (error) {
     const duration = Date.now() - startTime;
-    const errorMessage =
-      error instanceof Error ? error.message : "Command failed";
+    const errorMessage = error instanceof Error ? error.message : "Command failed";
 
     return {
       index,

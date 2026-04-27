@@ -17,8 +17,9 @@ The agent's ability to recognize when a user query requires semantic understandi
 ## Test Scenarios
 
 The evaluation uses real-world queries that describe:
+
 - **Message transformation** between different AI provider formats
-- **Retry mechanisms** with exponential backoff patterns  
+- **Retry mechanisms** with exponential backoff patterns
 - **Authentication flows** including token validation and refresh
 - **Error handling** for network failures
 - **Caching strategies** for API responses

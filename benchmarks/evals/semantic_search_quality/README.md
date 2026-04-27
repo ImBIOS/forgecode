@@ -19,6 +19,7 @@ npx tsx benchmarks/evals/semantic_search_quality/test_queries.ts \
 ```
 
 The query tester provides:
+
 - Detailed scores for embedding and reranking queries
 - Specific strengths and weaknesses
 - Actionable suggestions for improvement
@@ -40,10 +41,12 @@ npm run eval semantic_search_quality -- --model "anthropic/claude-sonnet-4.5"
 ## Purpose
 
 The semantic search feature uses two types of queries:
+
 1. **Embedding Query (`query`)**: Converted to vector embeddings for semantic similarity search
 2. **Reranking Query (`use_case`)**: Used by the reranker to filter results based on intent
 
 This eval verifies that:
+
 - Queries are well-formed and contain sufficient context
 - The two queries are different and serve distinct purposes
 - Results match the user's intent (implementation vs docs vs tests, etc.)
@@ -53,7 +56,9 @@ This eval verifies that:
 ## How It Works
 
 ### 1. Test Execution
+
 The eval runs various semantic search tasks covering different intents:
+
 - **Implementation**: Find actual code, not documentation
 - **Flow Understanding**: Understand how systems work
 - **Architecture**: Understand structural design
@@ -64,24 +69,30 @@ The eval runs various semantic search tasks covering different intents:
 - **Configuration**: Find config files and schemas
 
 ### 2. LLM Judge Evaluation
+
 After each task, an LLM judge (Gemini 3 Pro) evaluates:
 
 #### Query Quality (40 points)
+
 - **Embedding Query (15pts)**: Domain terms, technical context, behavior description
 - **Reranking Query (15pts)**: Intent clarity, context about WHY, specificity
 - **Query Differentiation (10pts)**: Queries serve different purposes
 
 #### Result Relevance (60 points)
+
 - **Intent Matching (25pts)**: Results match the stated intent
 - **File Type Accuracy (20pts)**: Correct file types returned
 - **Avoidance Compliance (15pts)**: Unwanted file types avoided
 
 #### Pass Criteria
+
 - Total score >= 70/100
 - No critical issues (e.g., identical queries, severe intent mismatch)
 
 ### 3. Structured Output
+
 The judge uses structured output (Zod schema) to provide:
+
 - Detailed scores for each dimension
 - Specific feedback on what's good/bad
 - List of critical issues
@@ -90,6 +101,7 @@ The judge uses structured output (Zod schema) to provide:
 ## Environment Variables
 
 Required:
+
 - `GOOGLE_APPLICATION_CREDENTIALS`: Path to Google Cloud service account JSON credentials file
 
 Or authenticate using `gcloud auth application-default login`.
@@ -101,6 +113,7 @@ The LLM judge uses Vertex AI to run Gemini 3 Pro. It supports Google's Applicati
 The eval includes diverse test cases:
 
 ### Implementation Queries
+
 ```yaml
 - task: "Find the retry mechanism with exponential backoff implementation"
   intent: "implementation"
@@ -109,6 +122,7 @@ The eval includes diverse test cases:
 ```
 
 ### Flow Understanding
+
 ```yaml
 - task: "How does the authentication flow work from request to response?"
   intent: "flow_understanding"
@@ -117,6 +131,7 @@ The eval includes diverse test cases:
 ```
 
 ### Documentation
+
 ```yaml
 - task: "Find documentation on how to configure semantic search"
   intent: "documentation"
@@ -127,13 +142,17 @@ The eval includes diverse test cases:
 ## Interpreting Results
 
 ### High Scores (>80)
+
 Queries are excellent - domain-specific, well-differentiated, and would return highly relevant results.
 
 ### Medium Scores (60-80)
+
 Queries are functional but have room for improvement. Check feedback for specific suggestions.
 
 ### Low Scores (<60)
+
 Queries have significant issues:
+
 - Too generic or vague
 - Embedding and reranking queries too similar
 - Intent mismatch
@@ -170,6 +189,7 @@ task.yml
 To add new test cases:
 
 1. Add to `task.yml` under `sources`:
+
 ```yaml
 - task: "Your task description"
   intent: "implementation|flow_understanding|tests|documentation|debugging|modification|architecture|configuration"

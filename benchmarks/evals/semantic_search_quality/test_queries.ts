@@ -2,7 +2,7 @@
 
 /**
  * Manual Query Tester for Semantic Search
- * 
+ *
  * This script helps developers test and improve their semantic search queries
  * before committing them to the codebase using Gemini 3 Pro via Vertex AI.
  */
@@ -78,8 +78,10 @@ function formatEvaluation(evaluation: z.infer<typeof QueryEvaluationSchema>): st
 
   // Embedding Query
   lines.push("📊 EMBEDDING QUERY ANALYSIS");
-  lines.push(`   Score: ${evaluation.embedding_query.score}/10 ${getScoreEmoji(evaluation.embedding_query.score)}\n`);
-  
+  lines.push(
+    `   Score: ${evaluation.embedding_query.score}/10 ${getScoreEmoji(evaluation.embedding_query.score)}\n`,
+  );
+
   if (evaluation.embedding_query.strengths.length > 0) {
     lines.push("   ✅ Strengths:");
     for (const strength of evaluation.embedding_query.strengths) {
@@ -106,7 +108,9 @@ function formatEvaluation(evaluation: z.infer<typeof QueryEvaluationSchema>): st
 
   // Reranking Query
   lines.push("📊 RERANKING QUERY ANALYSIS");
-  lines.push(`   Score: ${evaluation.reranking_query.score}/10 ${getScoreEmoji(evaluation.reranking_query.score)}\n`);
+  lines.push(
+    `   Score: ${evaluation.reranking_query.score}/10 ${getScoreEmoji(evaluation.reranking_query.score)}\n`,
+  );
 
   if (evaluation.reranking_query.strengths.length > 0) {
     lines.push("   ✅ Strengths:");
@@ -134,9 +138,11 @@ function formatEvaluation(evaluation: z.infer<typeof QueryEvaluationSchema>): st
 
   // Differentiation
   lines.push("🔄 QUERY DIFFERENTIATION");
-  lines.push(`   ${evaluation.differentiation.are_different ? "✅" : "❌"} Queries are ${evaluation.differentiation.are_different ? "sufficiently different" : "too similar"}`);
+  lines.push(
+    `   ${evaluation.differentiation.are_different ? "✅" : "❌"} Queries are ${evaluation.differentiation.are_different ? "sufficiently different" : "too similar"}`,
+  );
   lines.push(`   ${evaluation.differentiation.explanation}\n`);
-  
+
   if (evaluation.differentiation.suggestion) {
     lines.push(`   💡 ${evaluation.differentiation.suggestion}\n`);
   }
@@ -177,19 +183,15 @@ async function main() {
   console.log("╚═══════════════════════════════════════════════════════════╝\n");
 
   // Get queries from user
-  const embeddingQuery = await promptUser(
-    "Enter your embedding query (for vector search):\n> ",
-  );
-  
+  const embeddingQuery = await promptUser("Enter your embedding query (for vector search):\n> ");
+
   if (!embeddingQuery) {
     console.error("Embedding query is required");
     process.exit(1);
   }
 
   console.log("");
-  const rerankingQuery = await promptUser(
-    "Enter your reranking query (for result filtering):\n> ",
-  );
+  const rerankingQuery = await promptUser("Enter your reranking query (for result filtering):\n> ");
 
   if (!rerankingQuery) {
     console.error("Reranking query is required");
@@ -213,7 +215,7 @@ if (args.length >= 2) {
   // Non-interactive mode
   const embeddingQuery = args[0];
   const rerankingQuery = args[1];
-  
+
   console.log("\n🔄 Evaluating your queries...\n");
   evaluateQueries(embeddingQuery!, rerankingQuery!)
     .then((evaluation) => {

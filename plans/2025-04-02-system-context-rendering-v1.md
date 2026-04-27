@@ -4,7 +4,6 @@
 
 Modify the system context rendering mechanism to:
 
-
 1. Re-render the system context on every conversation turn
 2. Pass variables to the system context renderer (similar to event rendering)
 
@@ -37,7 +36,7 @@ async fn render_system(
     variables: &HashMap<String, Value>,
 ) -> anyhow::Result<String> {
     // Existing code...
-    
+
     // Create the context with README content for all agents
     let mut ctx = SystemContext {
         current_time,
@@ -49,7 +48,7 @@ async fn render_system(
         custom_rules: _agent.custom_rules.as_ref().cloned().unwrap_or_default(),
         variables: variables.clone(), // Add the variables
     };
-    
+
     // Render the template with the context and variables
     let result = self.hb.render_template(prompt.template.as_str(), &ctx)?;
     Ok(result)
@@ -65,7 +64,7 @@ Modify the `SystemContext` struct in `crates/forge_domain/src/system_context.rs`
 #[setters(strip_option)]
 pub struct SystemContext {
     // Existing fields...
-    
+
     // Variables passed to the template
     #[serde(skip_serializing_if = "HashMap::is_empty")]
     pub variables: HashMap<String, Value>,
@@ -79,11 +78,11 @@ Modify the orchestrator's conversation loop in `crates/forge_domain/src/orch.rs`
 ```rust
 async fn init_agent(&self, agent_id: &AgentId, event: &Event) -> anyhow::Result<()> {
     // Existing code...
-    
+
     loop {
         // Get up-to-date variables
         let conversation_vars = self.conversation.read().await.variables.clone();
-        
+
         // Re-render the system message if system_prompt is present
         if let Some(system_prompt) = &agent.system_prompt {
             let system_message = self
@@ -95,18 +94,18 @@ async fn init_agent(&self, agent_id: &AgentId, event: &Event) -> anyhow::Result<
             // Update the system message in the context
             context = context.set_first_system_message(system_message);
         }
-        
+
         // Set context for the current loop iteration
         self.set_context(&agent.id, context.clone()).await?;
-        
+
         // Existing loop code...
-        
+
         // If no tool results, break the loop as before
         if tool_results.is_empty() {
             break;
         }
     }
-    
+
     // Existing code...
 }
 ```
@@ -144,7 +143,6 @@ In `templates/forge-partial-system-info.hbs` and other system templates, add sup
 
 Update relevant tests to verify the changes:
 
-
 1. Add tests for the updated `render_system` method with variables
 2. Ensure the system context is properly updated in the orchestrator tests
 3. Verify that templates can correctly access variables in the system context
@@ -152,7 +150,6 @@ Update relevant tests to verify the changes:
 ## Verification Criteria
 
 The implementation will be considered successful if:
-
 
 1. The system context is re-rendered on each conversation turn, with up-to-date `current_time`
 2. Variables from the conversation state are correctly passed to the system context renderer
@@ -162,10 +159,7 @@ The implementation will be considered successful if:
 
 ## Technical Design Notes
 
-
 1. **Backward Compatibility**: The implementation should maintain backward compatibility with existing templates by making variables optional.
 2. **Performance**: Re-rendering the system context on each turn is not expected to cause performance issues, as confirmed.
 3. **Consistency**: The approach aligns with how event rendering already handles variables.
 4. **Error Handling**: Proper error handling should be maintained throughout the implementation.
-
-

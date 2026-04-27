@@ -15,11 +15,13 @@ Tools and scripts for creating and validating implementation plans.
 Validates the structure and content of a single plan file.
 
 **Usage:**
+
 ```bash
 ./.forge/skills/create-plan/validate-plan.sh plans/2025-11-27-example-v1.md
 ```
 
 **Checks:**
+
 - ✓ Filename follows convention: `YYYY-MM-DD-task-name-vN.md`
   - Year is reasonable (2020 to current year + 1)
   - Month is valid (01-12)
@@ -52,6 +54,7 @@ Validates the structure and content of a single plan file.
 - ✓ Reasonable number of tasks (3-20)
 
 **Exit Codes:**
+
 - `0` - Validation passed
 - `1` - Validation failed (errors found)
 
@@ -60,6 +63,7 @@ Validates the structure and content of a single plan file.
 Validates all plan files in a directory.
 
 **Usage:**
+
 ```bash
 # Validate all plans in default directory (plans/)
 ./.forge/skills/create-plan/validate-all-plans.sh
@@ -69,6 +73,7 @@ Validates all plan files in a directory.
 ```
 
 **Exit Codes:**
+
 - `0` - All plans passed validation
 - `1` - One or more plans failed validation
 

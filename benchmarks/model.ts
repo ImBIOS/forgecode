@@ -8,7 +8,7 @@ export type Task = {
   sources: Array<Source>;
 };
 
-export type Validation = 
+export type Validation =
   | {
       name: string;
       type: "regex";
@@ -28,7 +28,6 @@ export type Validation =
     };
 
 export type Source = { csv: string } | { cmd: string } | { value: Record<string, string>[] };
-
 
 export enum TaskStatus {
   Passed = "passed",

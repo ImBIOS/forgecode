@@ -66,7 +66,9 @@ fn is_symlink(path: &Path) -> bool {
 /// resolves each against `dir_path`, and returns them as absolute `PathBuf`s.
 ///
 /// Symlinks are always excluded regardless of their target or extension, so
-/// that the sync pipeline only ever processes real files.
+/// that the sync pipeline only ever processes real files. Files that are
+/// tracked in the index but missing from the working tree (e.g. deleted but
+/// not yet committed) are also excluded.
 ///
 /// Returns an error when the filtered list is empty, indicating no indexable
 /// source files exist in the workspace.
@@ -77,6 +79,7 @@ pub(crate) fn filter_and_resolve(
     let filtered: Vec<PathBuf> = paths
         .into_iter()
         .map(|p| dir_path.join(&p))
+        .filter(|p| p.exists())
         .filter(|p| !is_symlink(p))
         .filter(|p| !is_ignored_by_name(p))
         .filter(|p| has_allowed_extension(p))

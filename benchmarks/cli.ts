@@ -17,10 +17,7 @@ import { promisify } from "util";
 import pLimit from "p-limit";
 import pino from "pino";
 import { TaskStatus, type Task } from "./model.js";
-import {
-  getContextsFromSources,
-  generateCommand,
-} from "./command-generator.js";
+import { getContextsFromSources, generateCommand } from "./command-generator.js";
 import { parseCliArgs } from "./parse.js";
 import { executeTask, type TaskExecutionResult } from "./task-executor.js";
 import { processValidations, type ValidationResult } from "./verification.js";
@@ -118,10 +115,7 @@ async function main() {
   if (task.before_run && task.before_run.length > 0) {
     for (const cmd of task.before_run) {
       try {
-        logger.info(
-          { dir: setupTmpDir.name, command: cmd },
-          "Running setup command",
-        );
+        logger.info({ dir: setupTmpDir.name, command: cmd }, "Running setup command");
         // Small delay to allow logger to flush before command output
         await new Promise((resolve) => setTimeout(resolve, 0));
         await execAsync(cmd, {
@@ -184,7 +178,7 @@ async function main() {
       const taskTmpDir = await createTempDir(`forge-task-${i + 1}-`);
 
       // Create a 'task' subdirectory for running commands
-      const taskWorkDir = path.join(taskTmpDir.name, 'task');
+      const taskWorkDir = path.join(taskTmpDir.name, "task");
       await fs.mkdir(taskWorkDir, { recursive: true });
 
       const logFile = path.join(taskTmpDir.name, `task.log`);
@@ -196,7 +190,9 @@ async function main() {
       const commands = Array.isArray(task.run) ? task.run : [task.run];
 
       // Filter out empty or non-string commands
-      const validCommands = commands.filter(cmd => typeof cmd === 'string' && cmd.trim().length > 0);
+      const validCommands = commands.filter(
+        (cmd) => typeof cmd === "string" && cmd.trim().length > 0,
+      );
 
       // If no valid commands, skip this task
       if (validCommands.length === 0) {
@@ -300,31 +296,29 @@ async function main() {
         return {
           index: i + 1,
           status: hasTimeout ? TaskStatus.Timeout : TaskStatus.Failed,
-          command: validCommands.length === 1 ? validCommands[0]! : `${validCommands.length} commands`,
+          command:
+            validCommands.length === 1 ? validCommands[0]! : `${validCommands.length} commands`,
           duration: totalDuration,
           validationResults,
         };
       }
 
       // Run validations on the combined output
-      const { validationResults, status: validationStatus } =
-        await processValidations(
-          combinedOutput,
-          task,
-          logger,
-          i + 1,
-          totalDuration,
-          logFile,
-          context,
-        );
+      const { validationResults, status: validationStatus } = await processValidations(
+        combinedOutput,
+        task,
+        logger,
+        i + 1,
+        totalDuration,
+        logFile,
+        context,
+      );
 
       return {
         index: i + 1,
-        status:
-          validationStatus === "passed"
-            ? TaskStatus.Passed
-            : TaskStatus.ValidationFailed,
-        command: validCommands.length === 1 ? validCommands[0]! : `${validCommands.length} commands`,
+        status: validationStatus === "passed" ? TaskStatus.Passed : TaskStatus.ValidationFailed,
+        command:
+          validCommands.length === 1 ? validCommands[0]! : `${validCommands.length} commands`,
         duration: totalDuration,
         validationResults,
       };
@@ -336,25 +330,14 @@ async function main() {
   results.push(...taskResults);
 
   // Calculate summary statistics
-  const successCount = results.filter(
-    (r) => r.status === TaskStatus.Passed,
-  ).length;
-  const warningCount = results.filter(
-    (r) => r.status === TaskStatus.ValidationFailed,
-  ).length;
-  const timeoutCount = results.filter(
-    (r) => r.status === TaskStatus.Timeout,
-  ).length;
-  const failCount = results.filter(
-    (r) => r.status === TaskStatus.Failed,
-  ).length;
+  const successCount = results.filter((r) => r.status === TaskStatus.Passed).length;
+  const warningCount = results.filter((r) => r.status === TaskStatus.ValidationFailed).length;
+  const timeoutCount = results.filter((r) => r.status === TaskStatus.Timeout).length;
+  const failCount = results.filter((r) => r.status === TaskStatus.Failed).length;
   const totalDuration = results.reduce((sum, r) => sum + r.duration, 0);
 
   // Calculate validation statistics
-  const totalValidations = results.reduce(
-    (sum, r) => sum + r.validationResults.length,
-    0,
-  );
+  const totalValidations = results.reduce((sum, r) => sum + r.validationResults.length, 0);
   const passedValidations = results.reduce(
     (sum, r) => sum + r.validationResults.filter((v) => v.passed).length,
     0,
@@ -383,7 +366,7 @@ async function main() {
   if (failCount > 0) {
     process.exit(1);
   }
-  
+
   // Exit successfully - ensures process terminates even with open handles
   process.exit(0);
 }

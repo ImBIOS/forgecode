@@ -69,6 +69,7 @@ Follow the template's `title` field if it provides a prefix (e.g., `"[Bug]: "`).
 Use the `write` tool to create `.forge/FORGE_ISSUE_BODY.md` with the structured Markdown content.
 
 **Step 2: Create issue**
+
 ```bash
 gh issue create \
   --title "[Prefix]: Descriptive Title" \
@@ -77,6 +78,7 @@ gh issue create \
 ```
 
 **Optional flags**:
+
 - `--assignee "username"`
 - `--milestone "name"`
 - `--draft` (For proposals or research)

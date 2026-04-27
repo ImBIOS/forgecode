@@ -101,11 +101,13 @@ sources:
 #### Task File Schema
 
 **`before_run`** (optional): Array of shell commands to execute before running tasks
+
 - Runs sequentially before the main command execution
 - Executes in a temporary directory created for the evaluation run
 - Useful for building binaries or setting up dependencies
 
 **`run`** (required): Command(s) to execute for each test case
+
 - Can be a single string or an array of strings
 - Commands support template placeholders (e.g., `{{variable}}`)
 - Multiple commands are executed sequentially
@@ -118,6 +120,7 @@ sources:
 **`early_exit`** (optional): Stop command execution when all validations pass
 
 **`validations`** (optional): Array of validation rules
+
 - `name`: Human-readable description
 - `type`: Validation type. Supported values:
   - `regex`: Match output against a regular expression pattern
@@ -129,6 +132,7 @@ sources:
   - `exit_code`: Expected exit code (default: 0)
 
 **`sources`** (required): Array of data sources
+
 - Currently supports CSV files: `- csv: filename.csv`
 - Future: Command output: `- cmd: command`
 
@@ -160,6 +164,7 @@ run:
 ```
 
 With CSV:
+
 ```csv
 input_file,format
 data1.txt,json
@@ -193,16 +198,19 @@ Tasks can have four statuses:
 ### Logging
 
 **Human-readable output (default):**
+
 ```bash
 npm run eval ./evals/my_eval/task.yml
 ```
 
 **Machine-readable JSON output:**
+
 ```bash
 LOG_JSON=1 npm run eval ./evals/my_eval/task.yml | jq .
 ```
 
 **Debug logging:**
+
 ```bash
 LOG_LEVEL=debug npm run eval ./evals/my_eval/task.yml
 ```
@@ -258,13 +266,13 @@ validations:
     type: shell
     command: grep -q "test"
     exit_code: 0
-  
+
   # Count words and ensure it's greater than 2
   - name: "More than 2 words"
     type: shell
     command: test $(wc -w | awk '{print $1}') -gt 2
     exit_code: 0
-  
+
   # Traditional regex validation (for comparison)
   - name: "Contains test or validation"
     type: regex
@@ -288,24 +296,28 @@ sources:
 ## Tips
 
 1. **Use quotes in commands**: When passing CSV values with spaces, wrap them in quotes:
+
    ```yaml
    command: forge -p '{{prompt}}'
    ```
 
 2. **Build before running**: Use `before_run` to ensure binaries are up-to-date:
+
    ```yaml
    before_run:
      - cargo build
    ```
 
 3. **Start with low parallelism**: Test with `parallelism: 1` first, then increase:
+
    ```yaml
-   parallelism: 1  # Start here
+   parallelism: 1 # Start here
    ```
 
 4. **Set appropriate timeouts**: Add timeouts to prevent hanging:
+
    ```yaml
-   timeout: 60  # seconds
+   timeout: 60 # seconds
    ```
 
 5. **Check debug logs**: When tasks fail, check the debug directory for full output:
@@ -316,5 +328,6 @@ sources:
 ## Exit Codes
 
 The CLI exits with:
+
 - **0**: All tasks passed
 - **1**: One or more tasks failed (excluding timeouts and validation failures)

@@ -1179,11 +1179,7 @@
   {
     "id": "azure",
     "api_key_vars": "AZURE_API_KEY",
-    "url_param_vars": [
-      "AZURE_RESOURCE_NAME",
-      "AZURE_DEPLOYMENT_NAME",
-      "AZURE_API_VERSION"
-    ],
+    "url_param_vars": ["AZURE_RESOURCE_NAME", "AZURE_DEPLOYMENT_NAME", "AZURE_API_VERSION"],
     "response_type": "OpenAI",
     "url": "https://{{AZURE_RESOURCE_NAME}}.openai.azure.com/openai/deployments/{{AZURE_DEPLOYMENT_NAME}}/chat/completions?api-version={{AZURE_API_VERSION}}",
     "models": "https://{{AZURE_RESOURCE_NAME}}.openai.azure.com/openai/models?api-version={{AZURE_API_VERSION}}",
@@ -2360,9 +2356,7 @@
   {
     "id": "minimax",
     "api_key_vars": "MINIMAX_API_KEY",
-    "url_param_vars": [
-      { "name": "HOSTNAME", "options": ["api.minimax.io", "api.minimaxi.com"] }
-    ],
+    "url_param_vars": [{ "name": "HOSTNAME", "options": ["api.minimax.io", "api.minimaxi.com"] }],
     "response_type": "Anthropic",
     "url": "https://{{#if HOSTNAME}}{{HOSTNAME}}{{else}}api.minimax.io{{/if}}/anthropic/v1/messages",
     "models": [
@@ -3413,7 +3407,14 @@
     "id": "xiaomi_mimo",
     "api_key_vars": "XIAOMI_MIMO_API_KEY",
     "url_param_vars": [
-      { "name": "CLUSTER", "options": ["token-plan-sgp.xiaomimimo.com", "token-plan-cn.xiaomimimo.com", "token-plan-ams.xiaomimimo.com"] }
+      {
+        "name": "CLUSTER",
+        "options": [
+          "token-plan-sgp.xiaomimimo.com",
+          "token-plan-cn.xiaomimimo.com",
+          "token-plan-ams.xiaomimimo.com"
+        ]
+      }
     ],
     "response_type": "OpenAI",
     "url": "https://{{#if CLUSTER}}{{CLUSTER}}{{else}}token-plan-sgp.xiaomimimo.com{{/if}}/v1/chat/completions",

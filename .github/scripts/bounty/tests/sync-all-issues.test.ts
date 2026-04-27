@@ -43,7 +43,14 @@ function makeMockApi(issues: Issue[]): GitHubApi & {
 }
 
 function makeIssue(overrides: Partial<Issue> & { number: number }): Issue {
-  return { title: "Test issue", html_url: `https://github.com/owner/repo/issues/${overrides.number}`, state: "open", labels: [], assignees: [], ...overrides };
+  return {
+    title: "Test issue",
+    html_url: `https://github.com/owner/repo/issues/${overrides.number}`,
+    state: "open",
+    labels: [],
+    assignees: [],
+    ...overrides,
+  };
 }
 
 function labelNames(...names: string[]): { name: string }[] {
@@ -126,9 +133,7 @@ describe("syncAllIssues", () => {
   });
 
   it("returns empty patch when all issues are already in sync", async () => {
-    const issues = [
-      makeIssue({ number: 1, labels: labelNames("bounty: $100", "bounty") }),
-    ];
+    const issues = [makeIssue({ number: 1, labels: labelNames("bounty: $100", "bounty") })];
     const api = makeMockApi(issues);
     const patch = await syncAllIssues({ api });
     assert.deepEqual(patch.ops, []);

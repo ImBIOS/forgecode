@@ -183,24 +183,24 @@ run:
 
        Trade-offs: More flexible and extensible architecture, but adds abstraction layers and complexity. The current approach of checking tool type is simpler for the immediate use case.
     EOF
-  - |  
-      FORGE_DEBUG_REQUESTS='{{dir}}/context.json' forgee --provider open_router --model {{model}} -p '{{task}}'
+  - |
+    FORGE_DEBUG_REQUESTS='{{dir}}/context.json' forgee --provider open_router --model {{model}} -p '{{task}}'
 parallelism: 2
 timeout: 180
 early_exit: true
 validations:
   - name: "Should use patch tool"
     type: shell
-    command: "jq -e '[.messages[]?.tool_calls[]? | select(.function.name == \"patch\")] | length > 0' {{dir}}/context.json"
-    
+    command: 'jq -e ''[.messages[]?.tool_calls[]? | select(.function.name == "patch")] | length > 0'' {{dir}}/context.json'
+
   - name: "Should NOT have patch failures due to missing operation field"
     type: shell
-    command: "! jq -e '[.messages[]? | select(.role == \"tool\" and .name == \"patch\" and (.content | contains(\"missing field\") and contains(\"operation\")))] | length > 0' {{dir}}/context.json"
-    
+    command: '! jq -e ''[.messages[]? | select(.role == "tool" and .name == "patch" and (.content | contains("missing field") and contains("operation")))] | length > 0'' {{dir}}/context.json'
+
   - name: "Should NOT have patch failures due to text mismatch"
     type: shell
-    command: "! jq -e '[.messages[]? | select(.role == \"tool\" and .name == \"patch\" and (.content | contains(\"Could not find match for search text\")))] | length > 0' {{dir}}/context.json"
-    
+    command: '! jq -e ''[.messages[]? | select(.role == "tool" and .name == "patch" and (.content | contains("Could not find match for search text")))] | length > 0'' {{dir}}/context.json'
+
   - name: "Patch search text should match file content exactly"
     type: shell
     command: |

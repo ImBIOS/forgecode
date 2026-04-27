@@ -7,7 +7,7 @@ A sophisticated AI-powered coding assistant platform built in Rust, designed to 
 - 🤖 **AI-Powered Code Generation** - Advanced code generation and manipulation using modern AI models
 - 🔍 **Smart Code Analysis** - Language-aware parsing and analysis for multiple programming languages
 - 🛠️ **Extensive Tool System** - Rich set of development tools including file operations, shell commands, and code outline generation
-- 💾 **Persistent Conversations** - Maintain context and history across coding sessions  
+- 💾 **Persistent Conversations** - Maintain context and history across coding sessions
 - 🔒 **Secure Operations** - Built-in security measures for file system and shell operations
 - 🔌 **Extensible Architecture** - Modular design supporting easy addition of new features and languages
 
@@ -61,6 +61,7 @@ OPENROUTER_API_KEY="your-api-key"
 ## 📚 Documentation
 
 Internal documentation:
+
 - [Onboarding Guide](docs/onboarding.md)
 - [Architecture Overview](docs/architecture.md)
 

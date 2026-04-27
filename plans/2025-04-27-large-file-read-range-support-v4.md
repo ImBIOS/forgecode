@@ -1,20 +1,21 @@
 # Large File Range Reading Support (v4)
 
 ## Objective
+
 Implement support for reading extremely large text files by adding range parameters (start_byte and end_byte) to the file read tool, allowing users to read specific portions of large files without loading the entire file into memory. Binary files should not be supported and UTF-8 character boundaries must always be respected.
 
 ## Implementation Plan
 
 1. **Update `FsReadService` interface to support range reading**
    - Dependencies: None
-   - Files: 
+   - Files:
      - `crates/forge_services/src/infra.rs`
    - Notes: Add a new method to the trait that accepts start and end positions
    - Status: Not Started
 
 2. **Implement the range reading functionality in `ForgeFileReadService`**
    - Dependencies: Task 1
-   - Files: 
+   - Files:
      - `crates/forge_infra/src/fs_read.rs`
    - Notes: Implement the new trait method using Tokio's file API for efficient reading
    - Status: Not Started
@@ -29,7 +30,7 @@ Implement support for reading extremely large text files by adding range paramet
 
 4. **Update ForgeFS to support range reading with binary file validation**
    - Dependencies: Tasks 2, 3
-   - Files: 
+   - Files:
      - `crates/forge_fs/src/lib.rs`
    - Notes: Add a new method for range-based file reading that rejects binary files
    - Status: Not Started
@@ -43,33 +44,35 @@ Implement support for reading extremely large text files by adding range paramet
 
 6. **Update the `FSReadInput` struct to include optional range parameters**
    - Dependencies: None
-   - Files: 
+   - Files:
      - `crates/forge_services/src/tools/fs/fs_read.rs`
    - Notes: Add optional start_byte and end_byte fields to the input struct
    - Status: Not Started
 
 7. **Modify FSRead tool implementation to support range reading and reject binary files**
    - Dependencies: Tasks 1, 2, 3, 4, 5, 6
-   - Files: 
+   - Files:
      - `crates/forge_services/src/tools/fs/fs_read.rs`
    - Notes: Update the `call` method to use the range-based reading with UTF-8 boundary adjustment and ensure binary files are rejected
    - Status: Not Started
 
 8. **Update the FSRead tool description**
    - Dependencies: Task 6
-   - Files: 
+   - Files:
      - `crates/forge_services/src/tools/fs/fs_read.rs`
    - Notes: Update docstring to include range parameters in the tool description and explicitly mention that binary files are not supported and UTF-8 boundaries are always respected
 
-      Sample Response:
-      ```
-      ---
-      path: /a/b/c.txt
-      range: 100-200
-      total: 1024
-      ---
-      Hello! This is the contents of file c.txt
-      ```
+     Sample Response:
+
+     ```
+     ---
+     path: /a/b/c.txt
+     range: 100-200
+     total: 1024
+     ---
+     Hello! This is the contents of file c.txt
+     ```
+
    - Status: Not Started
 
 9. **Implement file size detection logic**
@@ -88,7 +91,7 @@ Implement support for reading extremely large text files by adding range paramet
 
 11. **Add unit tests for range-based file reading and binary file rejection**
     - Dependencies: Tasks 1-10
-    - Files: 
+    - Files:
       - `crates/forge_services/src/tools/fs/fs_read.rs`
       - `crates/forge_infra/src/fs_read.rs`
       - `crates/forge_fs/src/lib.rs`
@@ -96,6 +99,7 @@ Implement support for reading extremely large text files by adding range paramet
     - Status: Not Started
 
 ## Verification Criteria
+
 - The file read tool correctly returns only the requested range of bytes from large text files
 - The tool properly identifies and rejects binary files with a clear error message using the infer crate
 - The tool always adjusts range boundaries to respect UTF-8 character boundaries
@@ -121,27 +125,27 @@ Implement support for reading extremely large text files by adding range paramet
 ## Potential Risks and Mitigations
 
 1. **Performance issues with extremely large text files**  
-   Mitigation: 
+   Mitigation:
    - Ensure that the implementation doesn't read the entire file when a range is specified
    - Use Tokio's file operations that support seeking and partial reads
    - Verify with benchmarks on files of various sizes (MB to GB)
    - Consider implementing a buffered reading strategy for large ranges
 
 2. **UTF-8 boundary adjustment overhead**  
-   Mitigation: 
+   Mitigation:
    - Optimize the UTF-8 boundary detection algorithm for performance
    - Implement caching for boundary positions when repeated reads are requested
    - Use efficient byte scanning techniques that minimize CPU and memory usage
    - Provide clear metadata about the boundary adjustments that were made
 
 3. **Breaking changes to the existing API**  
-   Mitigation: 
+   Mitigation:
    - Make the range parameters optional with default values that maintain backward compatibility
    - Document the behavior changes thoroughly
    - Ensure all existing tests continue to pass with the new implementation
 
 4. **Inaccurate binary file detection**  
-   Mitigation: 
+   Mitigation:
    - Use the infer crate which provides robust file type detection
    - Still implement fallback checks for edge cases the infer crate might miss
    - Add comprehensive tests with various file types to verify correct detection
@@ -216,6 +220,7 @@ pub end_byte: Option<u64>,
 To detect binary files, we'll use the `infer` crate:
 
 1. Add the infer crate to dependencies in Cargo.toml:
+
    ```toml
    [dependencies]
    infer = "0.15.0"  # Use the latest version

@@ -69,6 +69,7 @@ forge provider login
 # Then start Forge
 forge
 ```
+
 That's it! Forge is now ready to assist you with your development tasks.
 
 ## Usage Examples
@@ -242,11 +243,11 @@ When you install the ZSH plugin (`forge setup`), you get a `:` prefix command sy
 
 Forge ships with three built-in agents, each with a different role:
 
-| Agent | Alias | Purpose | Modifies files? |
-|---|---|---|---|
-| `forge` | (default) | Implementation: builds features, fixes bugs, and runs tests | Yes |
-| `sage` | `:ask` | Research: maps architecture, traces data flow, and reads code | No |
-| `muse` | `:plan` | Planning: analyzes structure and writes implementation plans to `plans/` | No |
+| Agent   | Alias     | Purpose                                                                  | Modifies files? |
+| ------- | --------- | ------------------------------------------------------------------------ | --------------- |
+| `forge` | (default) | Implementation: builds features, fixes bugs, and runs tests              | Yes             |
+| `sage`  | `:ask`    | Research: maps architecture, traces data flow, and reads code            | No              |
+| `muse`  | `:plan`   | Planning: analyzes structure and writes implementation plans to `plans/` | No              |
 
 ### Sending Prompts
 
@@ -343,11 +344,11 @@ Use `:skill` to list available skills. The AI invokes them automatically when re
 
 **Custom skills** live in `SKILL.md` files with YAML front-matter. Precedence (highest first):
 
-| Location | Path | Scope |
-|---|---|---|
-| Project-local | `.forge/skills/<name>/SKILL.md` | This project only |
-| Global | `~/forge/skills/<name>/SKILL.md` | All projects |
-| Built-in | Embedded in binary | Always available |
+| Location      | Path                             | Scope             |
+| ------------- | -------------------------------- | ----------------- |
+| Project-local | `.forge/skills/<name>/SKILL.md`  | This project only |
+| Global        | `~/forge/skills/<name>/SKILL.md` | All projects      |
+| Built-in      | Embedded in binary               | Always available  |
 
 Project-local skills override global ones, which override built-in ones. To scaffold a new skill, ask: `: create a new skill`.
 
@@ -372,39 +373,38 @@ After running `:sync`, the AI can search your codebase by meaning rather than ex
 
 ### Quick Reference: All `:` Commands
 
-
-| Command | Alias | What it does |
-|---|---|---|
-| `: <prompt>` | | Send prompt to active agent |
-| `:new` | `:n` | Start new conversation |
-| `:conversation` | `:c` | Browse/switch conversations (fzf) |
-| `:conversation -` | | Toggle to previous conversation |
-| `:clone` | | Branch current conversation |
-| `:rename <name>` | `:rn` | Rename current conversation |
-| `:conversation-rename` | | Rename conversation (fzf picker) |
-| `:retry` | `:r` | Retry last prompt |
-| `:copy` | | Copy last response to clipboard |
-| `:dump` | `:d` | Export conversation as JSON |
-| `:compact` | | Compact context |
-| `:commit` | | AI commit (immediate) |
-| `:commit-preview` | | AI commit (review first) |
-| `:suggest <desc>` | `:s` | Translate natural language to command |
-| `:edit` | `:ed` | Compose prompt in $EDITOR |
-| `:sage <prompt>` | `:ask` | Q&A / code understanding agent |
-| `:muse <prompt>` | `:plan` | Planning agent |
-| `:agent <name>` | `:a` | Switch active agent (fzf picker if no name given) |
-| `:model <id>` | `:m` | Set model for this session only |
-| `:config-model <id>` | `:cm` | Set default model (persistent) |
-| `:reasoning-effort <lvl>` | `:re` | Set reasoning effort for session |
-| `:config-reload` | `:cr` | Reset session overrides to global config |
-| `:info` | `:i` | Show session info |
-| `:sync` | `:workspace-sync` | Index codebase for semantic search |
-| `:tools` | `:t` | List available tools |
-| `:skill` | | List available skills |
-| `:login` | `:provider-login` | Login to a provider |
-| `:logout` | | Logout from a provider |
-| `:keyboard-shortcuts` | `:kb` | Show keyboard shortcuts |
-| `:doctor` | | Run shell environment diagnostics |
+| Command                   | Alias             | What it does                                      |
+| ------------------------- | ----------------- | ------------------------------------------------- |
+| `: <prompt>`              |                   | Send prompt to active agent                       |
+| `:new`                    | `:n`              | Start new conversation                            |
+| `:conversation`           | `:c`              | Browse/switch conversations (fzf)                 |
+| `:conversation -`         |                   | Toggle to previous conversation                   |
+| `:clone`                  |                   | Branch current conversation                       |
+| `:rename <name>`          | `:rn`             | Rename current conversation                       |
+| `:conversation-rename`    |                   | Rename conversation (fzf picker)                  |
+| `:retry`                  | `:r`              | Retry last prompt                                 |
+| `:copy`                   |                   | Copy last response to clipboard                   |
+| `:dump`                   | `:d`              | Export conversation as JSON                       |
+| `:compact`                |                   | Compact context                                   |
+| `:commit`                 |                   | AI commit (immediate)                             |
+| `:commit-preview`         |                   | AI commit (review first)                          |
+| `:suggest <desc>`         | `:s`              | Translate natural language to command             |
+| `:edit`                   | `:ed`             | Compose prompt in $EDITOR                         |
+| `:sage <prompt>`          | `:ask`            | Q&A / code understanding agent                    |
+| `:muse <prompt>`          | `:plan`           | Planning agent                                    |
+| `:agent <name>`           | `:a`              | Switch active agent (fzf picker if no name given) |
+| `:model <id>`             | `:m`              | Set model for this session only                   |
+| `:config-model <id>`      | `:cm`             | Set default model (persistent)                    |
+| `:reasoning-effort <lvl>` | `:re`             | Set reasoning effort for session                  |
+| `:config-reload`          | `:cr`             | Reset session overrides to global config          |
+| `:info`                   | `:i`              | Show session info                                 |
+| `:sync`                   | `:workspace-sync` | Index codebase for semantic search                |
+| `:tools`                  | `:t`              | List available tools                              |
+| `:skill`                  |                   | List available skills                             |
+| `:login`                  | `:provider-login` | Login to a provider                               |
+| `:logout`                 |                   | Logout from a provider                            |
+| `:keyboard-shortcuts`     | `:kb`             | Show keyboard shortcuts                           |
+| `:doctor`                 |                   | Run shell environment diagnostics                 |
 
 ---
 
@@ -412,18 +412,18 @@ After running `:sync`, the AI can search your codebase by meaning rather than ex
 
 Here's a quick reference of Forge's command-line options:
 
-| Option                              | Description                                                              |
-| ----------------------------------- | ------------------------------------------------------------------------ |
-| `-p, --prompt <PROMPT>`             | Direct prompt to process without entering interactive mode               |
-| `-e, --event <EVENT>`               | Dispatch an event to the workflow in JSON format                         |
-| `--conversation <CONVERSATION>`     | Path to a JSON file containing the conversation to execute               |
-| `--conversation-id <ID>`            | Resume or continue an existing conversation by ID                        |
-| `--agent <AGENT>`                   | Agent ID to use for this session                                         |
-| `-C, --directory <DIR>`             | Change to this directory before starting                                 |
-| `--sandbox <NAME>`                  | Create an isolated git worktree + branch for safe experimentation        |
-| `--verbose`                         | Enable verbose logging output                                            |
-| `-h, --help`                        | Print help information                                                   |
-| `-V, --version`                     | Print version                                                            |
+| Option                          | Description                                                       |
+| ------------------------------- | ----------------------------------------------------------------- |
+| `-p, --prompt <PROMPT>`         | Direct prompt to process without entering interactive mode        |
+| `-e, --event <EVENT>`           | Dispatch an event to the workflow in JSON format                  |
+| `--conversation <CONVERSATION>` | Path to a JSON file containing the conversation to execute        |
+| `--conversation-id <ID>`        | Resume or continue an existing conversation by ID                 |
+| `--agent <AGENT>`               | Agent ID to use for this session                                  |
+| `-C, --directory <DIR>`         | Change to this directory before starting                          |
+| `--sandbox <NAME>`              | Create an isolated git worktree + branch for safe experimentation |
+| `--verbose`                     | Enable verbose logging output                                     |
+| `-h, --help`                    | Print help information                                            |
+| `-V, --version`                 | Print version                                                     |
 
 ### Subcommands
 
@@ -655,6 +655,7 @@ model: google/gemini-2.5-pro
 ```
 
 **Available Models:**
+
 - Claude models: `claude-sonnet-4@20250514`
 - Gemini models: `gemini-2.5-pro`, `gemini-2.0-flash`
 
@@ -700,7 +701,6 @@ model: deepseek-r1-distill-llama-70b
 To use Amazon Bedrock models with Forge, you'll need to first set up the [Bedrock Access Gateway](https://github.com/aws-samples/bedrock-access-gateway):
 
 1. **Set up Bedrock Access Gateway**:
-
    - Follow the deployment steps in the [Bedrock Access Gateway repo](https://github.com/aws-samples/bedrock-access-gateway)
    - Create your own API key in Secrets Manager
    - Deploy the CloudFormation stack
@@ -900,6 +900,7 @@ FORGE_LOG=forge=info                  # Log filter level (default: forge=debug w
 ```
 
 The `FORGE_LOG` variable controls the logging level for Forge's internal operations using the standard tracing filter syntax. Common values:
+
 - `forge=error` - Only errors
 - `forge=warn` - Warnings and errors
 - `forge=info` - Informational messages (default when tracking enabled)
